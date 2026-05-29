@@ -1,7 +1,5 @@
-// ─── In-memory DB with JSON file persistence ───────────────────────────────
 const fs = require('fs');
 const path = require('path');
-
 const DB_PATH = path.join(__dirname, '../data/db.json');
 
 function ensureDir() {
@@ -25,14 +23,18 @@ function getDefaultDB() {
   return {
     users: [
       {
-        id: '1', email: 'admin@nexagrow.ma', name: 'Admin NexaGrow',
-        password: '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lihO', // admin2026
-        role: 'admin', company: 'NexaGrow Demo', plan: 'pro',
+        id: '1',
+        email: 'admin@nexagrow.ma',
+        name: 'Admin NexaGrow',
+        password: '$2a$10$H5wVXfke5QdhLWIRoKlVeOv7MvM4RtGFBi57m9t0JtUIPLESTjSVG',
+        role: 'admin', company: 'NexaGrow', plan: 'pro',
         createdAt: new Date().toISOString()
       },
       {
-        id: '2', email: 'demo@nexagrow.ma', name: 'Demo PME',
-        password: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // demo
+        id: '2',
+        email: 'demo@nexagrow.ma',
+        name: 'Demo PME',
+        password: '$2a$10$9Fj7lFaNkI01F6rvr0wOcumrR3l9tqmOavcMuB/mrx1dGOom106P.',
         role: 'demo', company: 'Boutique Benali', plan: 'starter',
         createdAt: new Date().toISOString()
       }
