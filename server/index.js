@@ -424,7 +424,11 @@ app.get('/admin', (req, res) => {
 app.get('/app', (req, res) => {
   const token = req.cookies?.token;
   if (!token) return res.redirect('/login');
-  try { jwt.verify(token, JWT_SECRET); res.sendFile(path.join(__dirname, '../public/app.html')); }
+  try {
+    const u = jwt.verify(token, JWT_SECRET);
+    if (u.role === 'superadmin') return res.redirect('/admin');
+    res.sendFile(path.join(__dirname, '../public/app.html'));
+  }
   catch(e) { res.clearCookie('token'); res.redirect('/login'); }
 });
 app.get('/', (req, res) => {
@@ -432,7 +436,8 @@ app.get('/', (req, res) => {
   if (token) {
     try {
       const u = jwt.verify(token, JWT_SECRET);
-      return res.redirect(u.role === 'superadmin' ? '/admin' : '/app');
+      if (u.role === 'superadmin') return res.redirect('/admin');
+      return res.redirect('/app');
     } catch(e) { res.clearCookie('token'); }
   }
   res.sendFile(path.join(__dirname, '../public/index.html'));

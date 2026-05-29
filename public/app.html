@@ -211,6 +211,7 @@ td{padding:10px 13px;font-size:12px;border-top:1px solid var(--border);}
     <div class="nav-sec">Système</div>
     <button class="nb" onclick="go('integrations')"><span class="ic">🔌</span>Intégrations</button>
     <button class="nb" onclick="go('settings')"><span class="ic">⚙</span>Paramètres</button>
+    <button class="nb" id="admin-nav-btn" style="display:none;" onclick="window.location.href='/admin'"><span class="ic">👑</span>Admin Panel</button>
     <button class="nb" onclick="logout()"><span class="ic">🚪</span>Déconnexion</button>
   </nav>
   <div class="sb-user">
@@ -230,6 +231,7 @@ td{padding:10px 13px;font-size:12px;border-top:1px solid var(--border);}
     <div class="pg-title" id="pg-title">Dashboard</div>
     <div style="display:flex;align-items:center;gap:10px;" id="topbar-right">
       <button class="tb-chip warn" id="alert-btn" style="display:none" onclick="go('dashboard')">⚠️ <span id="alert-count">0</span> alerte(s)</button>
+      <a id="admin-link" href="/admin" style="display:none;padding:7px 14px;border-radius:8px;background:linear-gradient(135deg,#F59E0B,#EF4444);border:none;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);text-decoration:none;">👑 Admin Panel</a>
       <button class="btn-ai" onclick="openChat()">🦙 Ask Llama</button>
     </div>
   </header>
@@ -301,6 +303,12 @@ async function init() {
   document.getElementById('u-name').textContent = user.name;
   document.getElementById('u-plan').textContent = (user.company || '') + ' · ' + (user.plan || 'starter');
   document.getElementById('u-av').textContent = user.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  if (user.role === 'superadmin') {
+    document.getElementById('admin-link').style.display = 'flex';
+    document.getElementById('admin-nav-btn').style.display = 'flex';
+    // Redirect superadmin directly to admin panel
+    window.location.href = '/admin';
+  }
 
   await Promise.all([loadCampaigns(), loadProducts(), loadAlerts(), loadIntegrations()]);
   renderPage('dashboard');
