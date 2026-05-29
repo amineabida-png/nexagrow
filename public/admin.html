@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexaGrow — Super Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#07080C;--surf:#0E1018;--surf2:#141720;--border:#1C2032;--acc:#4F6EF7;--accsoft:#4F6EF712;--accbdr:#4F6EF733;--green:#0ECB81;--gsoft:#0ECB8112;--gbdr:#0ECB8133;--red:#F0464A;--rsoft:#F0464A12;--rbdr:#F0464A33;--amber:#F5A623;--asoft:#F5A62312;--abdr:#F5A62333;--text:#DDE1EE;--muted:#5A6280;--font:'Instrument Sans',sans-serif;--disp:'Syne',sans-serif;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;display:flex;}
+::-webkit-scrollbar{width:3px;height:3px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:#252A3C;border-radius:3px;}
+/* SIDEBAR */
+#sb{width:220px;min-width:220px;background:var(--surf);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;}
+.logo-w{padding:20px 16px 16px;border-bottom:1px solid var(--border);}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-i{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#F59E0B,#EF4444);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.logo-t{font-family:var(--disp);font-weight:800;font-size:15px;}
+.logo-s{font-size:9px;color:#F59E0B;letter-spacing:1px;text-transform:uppercase;}
+nav{flex:1;padding:8px 6px;overflow-y:auto;}
+.nb{width:100%;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:var(--muted);font-size:12.5px;font-family:var(--font);font-weight:500;text-align:left;transition:all 0.14s;margin-bottom:1px;}
+.nb:hover{background:var(--surf2);color:var(--text);}
+.nb.active{background:var(--accsoft);color:var(--acc);border:1px solid var(--accbdr);}
+.sb-foot{padding:12px;border-top:1px solid var(--border);}
+.u-card{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:9px;background:var(--surf2);}
+.u-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#EF4444);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+/* MAIN */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;height:100vh;}
+#topbar{padding:0 24px;height:56px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;}
+.pg-title{font-family:var(--disp);font-weight:700;font-size:15px;flex:1;}
+.sa-badge{padding:5px 12px;border-radius:20px;background:linear-gradient(135deg,#F59E0B22,#EF444422);border:1px solid #F59E0B44;color:#F59E0B;font-size:11px;font-weight:700;}
+#content{flex:1;overflow-y:auto;padding:22px 24px;}
+/* CARDS */
+.card{background:var(--surf);border:1px solid var(--border);border-radius:13px;padding:18px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.mb13{margin-bottom:13px;}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
+/* KPI */
+.kpi-l{font-size:10px;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:6px;}
+.kpi-v{font-family:var(--disp);font-size:26px;font-weight:800;letter-spacing:-1px;line-height:1;}
+.kpi-d{font-size:11px;font-weight:600;margin-top:5px;}
+.kpi-d.g{color:var(--green);}
+.kpi-d.a{color:var(--amber);}
+.kpi-d.r{color:var(--red);}
+/* TABLE */
+.tw{overflow:auto;}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:var(--bg);}
+th{padding:8px 12px;text-align:left;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:0.8px;text-transform:uppercase;white-space:nowrap;}
+td{padding:10px 12px;font-size:12px;border-top:1px solid var(--border);}
+.tr2:hover td{background:var(--surf2);}
+/* BADGE */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:600;}
+.badge.g{background:var(--gsoft);color:var(--green);}
+.badge.r{background:var(--rsoft);color:var(--red);}
+.badge.a{background:var(--asoft);color:var(--amber);}
+.badge.b{background:var(--accsoft);color:var(--acc);}
+.badge.gold{background:#F59E0B22;color:#F59E0B;border:1px solid #F59E0B44;}
+/* BUTTONS */
+.btn{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:var(--font);transition:all 0.14s;display:inline-flex;align-items:center;gap:5px;}
+.bp{background:var(--acc);color:#fff;}
+.bo{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.bo:hover{border-color:var(--border);color:var(--text);}
+.bg2{background:var(--gsoft);color:var(--green);border:1px solid var(--gbdr);}
+.br2{background:var(--rsoft);color:var(--red);border:1px solid var(--rbdr);}
+/* MODAL */
+.mover{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:9500;padding:18px;}
+.modal{background:var(--surf);border:1px solid var(--border);border-radius:16px;width:100%;max-width:540px;max-height:85vh;display:flex;flex-direction:column;animation:fu 0.2s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.mh{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.mt{font-family:var(--disp);font-weight:700;font-size:14px;}
+.mc{background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;}
+.mb{flex:1;overflow-y:auto;padding:18px 20px;}
+.mf{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;}
+/* FORM */
+.fg{margin-bottom:13px;}
+.fl{display:block;font-size:10.5px;font-weight:600;color:var(--muted);letter-spacing:0.6px;text-transform:uppercase;margin-bottom:5px;}
+.fi,.fs{width:100%;background:var(--surf2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;font-family:var(--font);outline:none;transition:border-color 0.14s;}
+.fi:focus,.fs:focus{border-color:var(--acc);}
+.fs option{background:var(--surf2);}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+/* PLAN CARDS */
+.plan-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:13px;}
+.plan-card{padding:16px;border-radius:12px;border:2px solid var(--border);cursor:pointer;transition:all 0.15s;text-align:center;}
+.plan-card:hover{border-color:var(--acc);}
+.plan-card.selected{border-color:var(--acc);background:var(--accsoft);}
+.plan-name{font-family:var(--disp);font-weight:700;font-size:13px;margin-bottom:4px;}
+.plan-price{font-size:20px;font-weight:800;color:var(--acc);}
+.plan-dur{font-size:10px;color:var(--muted);margin-top:2px;}
+/* EXPIRY */
+.expiry-ok{color:var(--green);}
+.expiry-warn{color:var(--amber);}
+.expiry-exp{color:var(--red);}
+@keyframes fi{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+.page{animation:fi 0.22s ease;}
+</style>
+</head>
+<body>
+<aside id="sb">
+  <div class="logo-w">
+    <div class="logo">
+      <div class="logo-i">👑</div>
+      <div>
+        <div class="logo-t">NexaGrow</div>
+        <div class="logo-s">Super Admin</div>
+      </div>
+    </div>
+  </div>
+  <nav>
+    <button class="nb active" onclick="go('dashboard')">📊 Dashboard</button>
+    <button class="nb" onclick="go('users')">👥 Utilisateurs</button>
+    <button class="nb" onclick="go('create')">➕ Créer compte</button>
+    <button class="nb" onclick="go('plans')">💰 Plans & Tarifs</button>
+  </nav>
+  <div class="sb-foot">
+    <div class="u-card">
+      <div class="u-av">SA</div>
+      <div>
+        <div style="font-size:11px;font-weight:600;">Super Admin</div>
+        <div style="font-size:10px;color:var(--muted);">Accès total</div>
+      </div>
+    </div>
+    <button class="btn bo" style="width:100%;margin-top:8px;font-size:11px;" onclick="logout()">🚪 Déconnexion</button>
+  </div>
+</aside>
+
+<div id="main">
+  <header id="topbar">
+    <div class="pg-title" id="pg-title">Dashboard Super Admin</div>
+    <span class="sa-badge">👑 SUPER ADMIN</span>
+    <button class="btn bo" style="font-size:11px;" onclick="window.open('/app','_blank')">🔗 Voir l'app</button>
+  </header>
+  <div id="content"></div>
+</div>
+
+<div id="mover" style="display:none;" onclick="closeMod(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="mh"><div class="mt" id="m-title">—</div><button class="mc" onclick="closeMod()">×</button></div>
+    <div class="mb" id="m-body"></div>
+    <div class="mf" id="m-foot"></div>
+  </div>
+</div>
+
+<script>
+let stats = {};
+let users = [];
+
+async function api(method, path, body) {
+  const opts = { method, credentials:'include', headers:{} };
+  if (body) { opts.headers['Content-Type']='application/json'; opts.body=JSON.stringify(body); }
+  const r = await fetch(path, opts);
+  if (r.status === 401) { window.location.href='/login'; return null; }
+  return r.json();
+}
+
+async function init() {
+  const me = await api('GET','/api/auth/me');
+  if (!me || me.user.role !== 'superadmin') { window.location.href='/login'; return; }
+  await loadData();
+  renderDashboard();
+}
+
+async function loadData() {
+  [stats, users] = await Promise.all([api('GET','/api/admin/stats'), api('GET','/api/admin/users')]);
+  stats = stats || {}; users = users || [];
+}
+
+function go(page) {
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>{ if(b.textContent.toLowerCase().includes(page.slice(0,4).toLowerCase())) b.classList.add('active'); });
+  const titles = {dashboard:'Dashboard Super Admin',users:'Gestion Utilisateurs',create:'Créer un Compte',plans:'Plans & Tarifs'};
+  document.getElementById('pg-title').textContent = titles[page]||page;
+  const renders = {dashboard:renderDashboard,users:renderUsers,create:renderCreate,plans:renderPlans};
+  if(renders[page]) renders[page]();
+}
+
+async function logout() { await api('POST','/api/auth/logout'); window.location.href='/login'; }
+
+// ── DASHBOARD ──
+function renderDashboard() {
+  const now = new Date();
+  const expiringSoon = users.filter(u => u.planExpiry && new Date(u.planExpiry) > now && (new Date(u.planExpiry)-now) < 7*86400000).length;
+  const expired = users.filter(u => u.planExpiry && new Date(u.planExpiry) < now).length;
+  const active = users.filter(u => u.active && u.role!=='superadmin').length;
+  const revenue = users.filter(u=>u.planPrice).reduce((a,u)=>a+(u.planPrice||0),0);
+
+  document.getElementById('content').innerHTML = `<div class="page">
+    <div class="g4 mb13">
+      <div class="card"><div class="kpi-l">Utilisateurs actifs</div><div class="kpi-v">${active}</div><div class="kpi-d g">↑ Comptes actifs</div></div>
+      <div class="card"><div class="kpi-l">Expirent bientôt</div><div class="kpi-v ta" style="color:var(--amber);">${expiringSoon}</div><div class="kpi-d a">⚠ Dans 7 jours</div></div>
+      <div class="card"><div class="kpi-l">Abonnements expirés</div><div class="kpi-v" style="color:var(--red);">${expired}</div><div class="kpi-d r">⚠ À renouveler</div></div>
+      <div class="card"><div class="kpi-l">Revenus total</div><div class="kpi-v">${revenue.toLocaleString()}</div><div class="kpi-d g">MAD encaissés</div></div>
+    </div>
+    <div class="g2 mb13">
+      <div class="card">
+        <div class="sh"><div style="font-family:var(--disp);font-weight:700;font-size:13px;">Répartition par plan</div></div>
+        ${[
+          {l:'30 jours — 500 MAD',k:'monthly',c:'b'},
+          {l:'1 an — 4 499 MAD',k:'yearly',c:'g'},
+          {l:'À vie — 13 000 MAD',k:'lifetime',c:'gold'},
+        ].map(p=>{
+          const count = users.filter(u=>u.plan===p.k).length;
+          const pct = users.length ? Math.round((count/users.length)*100) : 0;
+          return `<div style="margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;"><span style="color:var(--muted);">${p.l}</span><span style="font-weight:700;">${count} clients</span></div>
+            <div style="height:6px;border-radius:6px;background:var(--border);"><div style="height:100%;border-radius:6px;width:${pct}%;background:${p.c==='g'?'var(--green)':p.c==='gold'?'#F59E0B':'var(--acc)'};"></div></div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="card">
+        <div class="sh"><div style="font-family:var(--disp);font-weight:700;font-size:13px;">⚠ Alertes Comptes</div></div>
+        ${users.filter(u=>u.planExpiry&&(new Date(u.planExpiry)-new Date())<7*86400000&&new Date(u.planExpiry)>new Date()).map(u=>`
+          <div style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;background:var(--asoft);border:1px solid var(--abdr);margin-bottom:6px;">
+            <span style="font-size:13px;">⚠️</span>
+            <div style="flex:1;font-size:12px;"><strong>${u.name}</strong> — expire ${new Date(u.planExpiry).toLocaleDateString('fr-FR')}</div>
+            <button class="btn" style="font-size:10px;padding:4px 9px;background:var(--acc);color:#fff;" onclick="renewUser('${u.id}')">Renouveler</button>
+          </div>`).join('') || '<div style="font-size:12px;color:var(--muted);text-align:center;padding:20px;">✅ Aucune alerte</div>'}
+        ${expired > 0 ? users.filter(u=>u.planExpiry&&new Date(u.planExpiry)<new Date()).map(u=>`
+          <div style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;background:var(--rsoft);border:1px solid var(--rbdr);margin-bottom:6px;">
+            <span style="font-size:13px;">🔴</span>
+            <div style="flex:1;font-size:12px;"><strong>${u.name}</strong> — expiré le ${new Date(u.planExpiry).toLocaleDateString('fr-FR')}</div>
+            <button class="btn" style="font-size:10px;padding:4px 9px;background:var(--acc);color:#fff;" onclick="renewUser('${u.id}')">Renouveler</button>
+          </div>`).join('') : ''}
+      </div>
+    </div>
+    <div class="card">
+      <div class="sh"><div style="font-family:var(--disp);font-weight:700;font-size:13px;">Derniers utilisateurs</div><button class="btn bp" onclick="go('create')">➕ Créer compte</button></div>
+      ${renderUsersTable(users.slice(-5).reverse())}
+    </div>
+  </div>`;
+}
+
+// ── USERS ──
+function renderUsers() {
+  document.getElementById('content').innerHTML = `<div class="page">
+    <div style="display:flex;gap:9px;margin-bottom:13px;">
+      <button class="btn bp" onclick="go('create')">➕ Créer compte</button>
+      <button class="btn bo" onclick="loadData().then(renderUsers)">🔄 Actualiser</button>
+    </div>
+    <div class="card">${renderUsersTable(users)}</div>
+  </div>`;
+}
+
+function renderUsersTable(list) {
+  const now = new Date();
+  return `<div class="tw"><table>
+    <thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Plan</th><th>Expiration</th><th>Statut</th><th>Actions</th></tr></thead>
+    <tbody>${list.filter(u=>u.role!=='superadmin').map(u => {
+      let expiryHtml = '';
+      if (u.plan === 'lifetime') { expiryHtml = '<span style="color:var(--green);font-weight:700;">♾ À vie</span>'; }
+      else if (u.planExpiry) {
+        const d = new Date(u.planExpiry);
+        const daysLeft = Math.ceil((d-now)/86400000);
+        const fmt = d.toLocaleDateString('fr-FR');
+        if (daysLeft < 0) expiryHtml = `<span class="expiry-exp fw7">Expiré (${fmt})</span>`;
+        else if (daysLeft <= 7) expiryHtml = `<span class="expiry-warn">⚠ ${daysLeft}j restants (${fmt})</span>`;
+        else expiryHtml = `<span class="expiry-ok">${fmt}</span>`;
+      }
+      const planBadge = u.plan==='lifetime'?'<span class="badge gold">À vie</span>':u.plan==='yearly'?'<span class="badge g">1 an</span>':'<span class="badge b">30j</span>';
+      return `<tr class="tr2">
+        <td style="font-weight:700;">${u.name}</td>
+        <td style="font-size:11px;color:var(--muted);">${u.email}</td>
+        <td style="font-size:11px;">${u.company||'—'}</td>
+        <td>${planBadge}</td>
+        <td style="font-size:11px;">${expiryHtml}</td>
+        <td>${u.active?'<span class="badge g">Actif</span>':'<span class="badge r">Désactivé</span>'}</td>
+        <td>
+          <div style="display:flex;gap:5px;">
+            <button class="btn" style="font-size:10px;padding:4px 8px;background:var(--accsoft);color:var(--acc);border:1px solid var(--accbdr);" onclick="editUser('${u.id}')">✏️ Modifier</button>
+            <button class="btn" style="font-size:10px;padding:4px 8px;background:var(--gsoft);color:var(--green);border:1px solid var(--gbdr);" onclick="renewUser('${u.id}')">🔄 Renouveler</button>
+            <button class="btn" style="font-size:10px;padding:4px 8px;background:var(--rsoft);color:var(--red);border:1px solid var(--rbdr);" onclick="toggleActive('${u.id}',${u.active})">${u.active?'🚫 Désactiver':'✅ Activer'}</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table></div>`;
+}
+
+// ── CREATE ──
+function renderCreate() {
+  document.getElementById('content').innerHTML = `<div class="page">
+    <div class="card" style="max-width:580px;">
+      <div style="font-family:var(--disp);font-weight:700;font-size:15px;margin-bottom:18px;">➕ Créer un nouveau compte client</div>
+      <div class="fr2">
+        <div class="fg"><label class="fl">Nom complet</label><input class="fi" id="c-name" placeholder="Mohamed Alami"/></div>
+        <div class="fg"><label class="fl">Entreprise</label><input class="fi" id="c-company" placeholder="Boutique Atlas"/></div>
+      </div>
+      <div class="fg"><label class="fl">Email</label><input class="fi" id="c-email" type="email" placeholder="client@entreprise.ma"/></div>
+      <div class="fg"><label class="fl">Mot de passe</label><input class="fi" id="c-pass" type="text" placeholder="Mot de passe temporaire" value="NexaGrow2026!"/></div>
+      <div class="fg">
+        <label class="fl">Choisir le plan</label>
+        <div class="plan-cards" id="plan-select">
+          <div class="plan-card selected" onclick="selectPlan('monthly',this)"><div class="plan-name">30 Jours</div><div class="plan-price">500</div><div class="plan-dur">MAD</div></div>
+          <div class="plan-card" onclick="selectPlan('yearly',this)"><div class="plan-name">1 An</div><div class="plan-price">4 499</div><div class="plan-dur">MAD</div></div>
+          <div class="plan-card" onclick="selectPlan('lifetime',this)"><div class="plan-name">À Vie</div><div class="plan-price">13 000</div><div class="plan-dur">MAD</div></div>
+        </div>
+        <input type="hidden" id="c-plan" value="monthly"/>
+      </div>
+      <div id="c-result"></div>
+      <div style="display:flex;gap:9px;margin-top:6px;">
+        <button class="btn bp" style="font-size:13px;padding:10px 22px;" onclick="createUser()">✅ Créer le compte</button>
+        <button class="btn bo" onclick="go('users')">Annuler</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function selectPlan(plan, el) {
+  document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('c-plan').value = plan;
+}
+
+async function createUser() {
+  const name = document.getElementById('c-name').value.trim();
+  const company = document.getElementById('c-company').value.trim();
+  const email = document.getElementById('c-email').value.trim();
+  const pass = document.getElementById('c-pass').value.trim();
+  const plan = document.getElementById('c-plan').value;
+  const res = document.getElementById('c-result');
+  if (!name||!email||!pass) { res.innerHTML='<div style="color:var(--red);font-size:12px;margin-bottom:10px;">⚠ Remplissez tous les champs obligatoires.</div>'; return; }
+  res.innerHTML='<div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Création en cours…</div>';
+  const r = await api('POST','/api/admin/users',{name,company,email,password:pass,plan});
+  if (r?.ok) {
+    res.innerHTML=`<div style="background:var(--gsoft);border:1px solid var(--gbdr);border-radius:10px;padding:14px;font-size:12px;margin-bottom:12px;">
+      ✅ <strong>Compte créé avec succès !</strong><br><br>
+      📧 Email : <strong>${email}</strong><br>
+      🔑 Mot de passe : <strong>${pass}</strong><br>
+      📅 Plan : <strong>${r.user.plan}</strong>${r.user.planExpiry?'<br>⏰ Expire le : <strong>'+new Date(r.user.planExpiry).toLocaleDateString('fr-FR')+'</strong>':''}<br><br>
+      <em style="color:var(--muted);">Envoyez ces identifiants au client par WhatsApp ou email.</em>
+    </div>`;
+    await loadData();
+  } else { res.innerHTML=`<div style="color:var(--red);font-size:12px;margin-bottom:10px;">❌ ${r?.error||'Erreur'}</div>`; }
+}
+
+// ── EDIT ──
+function editUser(id) {
+  const u = users.find(x=>x.id===id); if(!u) return;
+  openMod(`✏️ Modifier — ${u.name}`,`
+    <div class="fr2">
+      <div class="fg"><label class="fl">Nom</label><input class="fi" id="e-name" value="${u.name}"/></div>
+      <div class="fg"><label class="fl">Entreprise</label><input class="fi" id="e-company" value="${u.company||''}"/></div>
+    </div>
+    <div class="fg"><label class="fl">Nouveau mot de passe (laisser vide = inchangé)</label><input class="fi" id="e-pass" type="password" placeholder="Nouveau mot de passe"/></div>
+    <div class="fg"><label class="fl">Plan</label><select class="fs" id="e-plan">
+      <option value="monthly" ${u.plan==='monthly'?'selected':''}>30 jours — 500 MAD</option>
+      <option value="yearly" ${u.plan==='yearly'?'selected':''}>1 an — 4 499 MAD</option>
+      <option value="lifetime" ${u.plan==='lifetime'?'selected':''}>À vie — 13 000 MAD</option>
+    </select></div>
+  `,`<button class="btn bo" onclick="closeMod()">Annuler</button>
+    <button class="btn br2" onclick="deleteUser('${id}')">🗑 Supprimer</button>
+    <button class="btn bp" onclick="saveUser('${id}')">💾 Sauvegarder</button>`);
+}
+
+async function saveUser(id) {
+  const body = { name:document.getElementById('e-name').value, company:document.getElementById('e-company').value, plan:document.getElementById('e-plan').value };
+  const pass = document.getElementById('e-pass').value;
+  if (pass) body.password = pass;
+  const r = await api('PUT',`/api/admin/users/${id}`,body);
+  if (r?.ok) { closeMod(); await loadData(); renderUsers(); }
+  else alert('Erreur: '+(r?.error||'Inconnu'));
+}
+
+async function renewUser(id) {
+  const u = users.find(x=>x.id===id); if(!u) return;
+  openMod(`🔄 Renouveler — ${u.name}`,`
+    <div style="font-size:13px;margin-bottom:16px;">Choisissez le nouveau plan pour <strong>${u.name}</strong> :</div>
+    <div class="plan-cards" id="r-plan-select">
+      <div class="plan-card selected" onclick="selectRenewPlan('monthly',this)"><div class="plan-name">30 Jours</div><div class="plan-price">500 MAD</div></div>
+      <div class="plan-card" onclick="selectRenewPlan('yearly',this)"><div class="plan-name">1 An</div><div class="plan-price">4 499 MAD</div></div>
+      <div class="plan-card" onclick="selectRenewPlan('lifetime',this)"><div class="plan-name">À Vie</div><div class="plan-price">13 000 MAD</div></div>
+    </div>
+    <input type="hidden" id="r-plan" value="monthly"/>
+  `,`<button class="btn bo" onclick="closeMod()">Annuler</button><button class="btn bp" onclick="doRenew('${id}')">✅ Renouveler</button>`);
+}
+
+function selectRenewPlan(plan,el) {
+  document.querySelectorAll('#r-plan-select .plan-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected'); document.getElementById('r-plan').value=plan;
+}
+
+async function doRenew(id) {
+  const plan = document.getElementById('r-plan').value;
+  const r = await api('PUT',`/api/admin/users/${id}`,{plan});
+  if (r?.ok) { closeMod(); await loadData(); renderUsers(); alert('✅ Abonnement renouvelé avec succès !'); }
+  else alert('Erreur: '+(r?.error||'Inconnu'));
+}
+
+async function toggleActive(id, current) {
+  if (!confirm(`${current?'Désactiver':'Activer'} ce compte ?`)) return;
+  const r = await api('PUT',`/api/admin/users/${id}`,{active:!current});
+  if (r?.ok) { await loadData(); renderUsers(); }
+}
+
+async function deleteUser(id) {
+  if (!confirm('Supprimer définitivement ce compte ?')) return;
+  const r = await api('DELETE',`/api/admin/users/${id}`);
+  if (r?.ok) { closeMod(); await loadData(); renderUsers(); }
+}
+
+// ── PLANS ──
+function renderPlans() {
+  document.getElementById('content').innerHTML = `<div class="page">
+    <div class="card" style="max-width:700px;">
+      <div style="font-family:var(--disp);font-weight:700;font-size:15px;margin-bottom:18px;">💰 Plans & Tarifs NexaGrow</div>
+      <div class="plan-cards" style="grid-template-columns:repeat(3,1fr);">
+        ${[
+          {id:'monthly',name:'30 Jours',price:'500 MAD',desc:'Accès complet 30 jours',features:['Dashboard complet','Agent IA Llama 3','Toutes les fonctionnalités','Support email']},
+          {id:'yearly',name:'1 An',price:'4 499 MAD',desc:'Économisez 501 MAD vs mensuel',features:['Tout du plan 30j','365 jours d\'accès','Priorité support','Rapport mensuel offert']},
+          {id:'lifetime',name:'À Vie',price:'13 000 MAD',desc:'Accès permanent à vie',features:['Accès illimité permanent','Toutes futures fonctionnalités','Support prioritaire VIP','Onboarding personnalisé']},
+        ].map(p=>`
+          <div style="background:var(--surf2);border:1px solid var(--border);border-radius:14px;padding:20px;">
+            <div style="font-family:var(--disp);font-weight:800;font-size:16px;margin-bottom:4px;">${p.name}</div>
+            <div style="font-size:22px;font-weight:800;color:var(--acc);margin-bottom:4px;">${p.price}</div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">${p.desc}</div>
+            ${p.features.map(f=>`<div style="display:flex;align-items:center;gap:7px;font-size:12px;margin-bottom:7px;"><span style="color:var(--green);font-weight:700;">✓</span>${f}</div>`).join('')}
+          </div>`).join('')}
+      </div>
+      <div style="margin-top:16px;padding:14px;background:var(--accsoft);border:1px solid var(--accbdr);border-radius:12px;font-size:13px;line-height:1.7;">
+        <strong style="color:var(--acc);">ℹ️ Comment créer un compte client :</strong><br>
+        1. Allez dans <strong>Créer compte</strong> dans le menu gauche<br>
+        2. Remplissez nom, email, entreprise<br>
+        3. Choisissez le plan payé par le client<br>
+        4. Cliquez Créer — les identifiants s'affichent<br>
+        5. Envoyez email + mot de passe au client par WhatsApp
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── MODAL ──
+function openMod(title,body,footer='') { document.getElementById('m-title').textContent=title; document.getElementById('m-body').innerHTML=body; document.getElementById('m-foot').innerHTML=footer; document.getElementById('mover').style.display='flex'; }
+function closeMod(e) { if(!e||e.target===document.getElementById('mover')) document.getElementById('mover').style.display='none'; }
+
+init();
+</script>
+</body>
+</html>
