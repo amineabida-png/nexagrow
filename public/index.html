@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexaGrow — La suite IA tout-en-un pour les PME marocaines</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#07080D;--surf:#0D0F1A;--surf2:#131629;--border:#1E2240;
+  --acc:#7B5CF6;--acc2:#9D7BFF;--accsoft:#7B5CF615;
+  --green:#00D084;--gsoft:#00D08415;
+  --red:#FF4757;--rsoft:#FF475715;
+  --amber:#FFB830;--asoft:#FFB83015;
+  --blue:#3B7EF6;--blsoft:#3B7EF615;
+  --text:#E8EAF6;--muted:#6B7A9F;--muted2:#2A3050;
+  --font:'Instrument Sans',sans-serif;--disp:'Syne',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);overflow-x:hidden;}
+/* UTILS */
+.container{max-width:1120px;margin:0 auto;padding:0 24px;}
+.flex{display:flex;}.items-center{align-items:center;}.justify-between{justify-content:space-between;}
+.gap8{gap:8px;}.gap12{gap:12px;}.gap16{gap:16px;}.gap24{gap:24px;}
+.fw7{font-weight:700;}.fw8{font-weight:800;}
+.fs11{font-size:11px;}.fs12{font-size:12px;}.fs13{font-size:13px;}.fs14{font-size:14px;}
+.tm{color:var(--muted);}.tg{color:var(--green);}.tr{color:var(--red);}.ta{color:var(--amber);}.tacc{color:var(--acc2);}
+.mb8{margin-bottom:8px;}.mb12{margin-bottom:12px;}.mb16{margin-bottom:16px;}.mb24{margin-bottom:24px;}.mb32{margin-bottom:32px;}.mb48{margin-bottom:48px;}
+/* NAVBAR */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(7,8,13,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-icon{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--acc),#4F46E5);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;font-family:var(--disp);}
+.nav-logo-text{font-family:var(--disp);font-size:20px;font-weight:800;}<br>.nav-logo-text span{color:var(--acc2);}
+.nav-links{display:flex;align-items:center;gap:28px;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;transition:color 0.15s;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{display:flex;align-items:center;gap:10px;}
+.btn-ghost{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text);font-family:var(--font);text-decoration:none;transition:all 0.15s;}
+.btn-ghost:hover{border-color:var(--acc);color:var(--acc2);}
+.btn-primary{padding:9px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;background:linear-gradient(135deg,var(--acc),#4F46E5);color:#fff;font-family:var(--font);text-decoration:none;transition:opacity 0.15s;display:inline-flex;align-items:center;gap:6px;}
+.btn-primary:hover{opacity:0.88;}
+.btn-large{padding:14px 32px;border-radius:12px;font-size:16px;font-weight:700;}
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;padding-top:64px;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 60% 30%,#7B5CF620 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 20% 80%,#3B7EF615 0%,transparent 50%);pointer-events:none;}
+.hero-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:60px;align-items:center;width:100%;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surf);font-size:12px;font-weight:600;margin-bottom:24px;}
+.hero-badge span{color:var(--acc2);}
+.hero-title{font-family:var(--disp);font-size:52px;font-weight:800;line-height:1.08;letter-spacing:-2px;margin-bottom:20px;}
+.hero-title .acc{background:linear-gradient(135deg,var(--acc2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:17px;color:var(--muted);line-height:1.65;margin-bottom:32px;max-width:480px;}
+.hero-actions{display:flex;align-items:center;gap:14px;margin-bottom:40px;}
+.hero-trust{display:flex;align-items:center;gap:16px;font-size:12px;color:var(--muted);}
+.trust-item{display:flex;align-items:center;gap:5px;}
+.trust-item::before{content:'✓';color:var(--green);font-weight:700;}
+/* DASHBOARD MOCKUP */
+.mockup{background:var(--surf);border:1px solid var(--border);border-radius:20px;padding:0;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,0.6),0 0 0 1px rgba(255,255,255,0.04);position:relative;}
+.mock-topbar{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(13,15,26,0.8);}
+.mock-logo{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;}
+.mock-logo-i{width:22px;height:22px;border-radius:5px;background:linear-gradient(135deg,var(--acc),#4F46E5);display:flex;align-items:center;justify-content:center;font-size:10px;}
+.mock-title{font-size:13px;font-weight:700;color:var(--text);}
+.mock-export{padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:10px;cursor:pointer;font-family:var(--font);}
+.mock-body{padding:16px;}
+.mock-period{font-size:10px;color:var(--muted);margin-bottom:12px;}
+.mock-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+.mock-kpi{background:var(--surf2);border-radius:9px;padding:10px;}
+.mk-label{font-size:9px;color:var(--muted);margin-bottom:4px;}
+.mk-value{font-family:var(--disp);font-size:15px;font-weight:800;letter-spacing:-0.5px;line-height:1;}
+.mk-delta{font-size:9px;margin-top:3px;}
+.mk-delta.up{color:var(--green);}
+.mock-charts{display:grid;grid-template-columns:1.6fr 1fr;gap:10px;margin-bottom:14px;}
+.mock-chart-card{background:var(--surf2);border-radius:9px;padding:12px;}
+.mc-title{font-size:10px;font-weight:600;margin-bottom:8px;}
+.mini-chart{width:100%;height:50px;}
+.mock-alerts{margin-bottom:12px;}
+.mock-alert-title{font-size:10px;font-weight:600;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;}
+.mock-alert{display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:7px;margin-bottom:4px;font-size:9.5px;}
+.mock-alert.r{background:var(--rsoft);border:1px solid rgba(255,71,87,0.2);}
+.mock-alert.a{background:var(--asoft);border:1px solid rgba(255,184,48,0.2);}
+.mock-alert.b{background:var(--blsoft);border:1px solid rgba(59,126,246,0.2);}
+.mock-alert-tag{padding:2px 6px;border-radius:4px;font-size:8px;font-weight:700;margin-left:auto;}
+.mock-alert.r .mock-alert-tag{background:var(--red);color:#fff;}
+.mock-alert.a .mock-alert-tag{background:var(--amber);color:#000;}
+.mock-alert.b .mock-alert-tag{background:var(--blue);color:#fff;}
+.mock-reco{background:linear-gradient(135deg,#7B5CF620,#4F46E520);border:1px solid var(--acc);border-radius:9px;padding:12px;}
+.mock-reco-title{font-size:9px;font-weight:700;color:var(--acc2);margin-bottom:5px;}
+.mock-reco-text{font-size:9px;line-height:1.5;margin-bottom:8px;}
+.mock-reco-gain{font-size:9px;color:var(--green);font-weight:700;margin-bottom:8px;}
+.mock-reco-btn{padding:5px 10px;border-radius:6px;background:var(--acc);border:none;color:#fff;font-size:9px;font-weight:700;cursor:pointer;font-family:var(--font);}
+.donut-wrap{position:relative;display:flex;align-items:center;justify-content:center;height:80px;}
+.donut-legend{margin-left:10px;display:flex;flex-direction:column;gap:4px;}
+.dl-item{display:flex;align-items:center;gap:5px;font-size:8.5px;}
+.dl-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+/* ICON BADGES */
+.plat-icon{padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surf2);font-size:11px;display:flex;align-items:center;gap:5px;font-weight:600;}
+/* SECTIONS */
+section{padding:80px 0;}
+.section-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:16px;}
+.sb-purple{background:var(--accsoft);border:1px solid rgba(123,92,246,0.3);color:var(--acc2);}
+.sb-green{background:var(--gsoft);border:1px solid rgba(0,208,132,0.3);color:var(--green);}
+.sb-blue{background:var(--blsoft);border:1px solid rgba(59,126,246,0.3);color:#6BA3FF;}
+.section-title{font-family:var(--disp);font-size:34px;font-weight:800;line-height:1.15;letter-spacing:-1px;margin-bottom:14px;}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.65;max-width:520px;}
+/* FEATURES GRID */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:20px;overflow:hidden;border:1px solid var(--border);}
+.feat-cell{background:var(--surf);padding:32px;transition:background 0.2s;}
+.feat-cell:hover{background:var(--surf2);}
+.feat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px;}
+.feat-icon.p{background:var(--accsoft);border:1px solid rgba(123,92,246,0.3);}
+.feat-icon.g{background:var(--gsoft);border:1px solid rgba(0,208,132,0.3);}
+.feat-icon.b{background:var(--blsoft);border:1px solid rgba(59,126,246,0.3);}
+.feat-icon.a{background:var(--asoft);border:1px solid rgba(255,184,48,0.3);}
+.feat-icon.r{background:var(--rsoft);border:1px solid rgba(255,71,87,0.3);}
+.feat-title{font-family:var(--disp);font-size:16px;font-weight:700;margin-bottom:8px;}
+.feat-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+/* 3 PILLARS */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.pillar{border-radius:20px;padding:32px;border:1px solid;}
+.pillar.p1{background:linear-gradient(135deg,rgba(123,92,246,0.08),rgba(79,70,229,0.04));border-color:rgba(123,92,246,0.25);}
+.pillar.p2{background:linear-gradient(135deg,rgba(0,208,132,0.06),rgba(0,208,132,0.02));border-color:rgba(0,208,132,0.2);}
+.pillar.p3{background:linear-gradient(135deg,rgba(59,126,246,0.06),rgba(59,126,246,0.02));border-color:rgba(59,126,246,0.2);}
+.pillar-head{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.pillar-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.p1 .pillar-icon{background:var(--accsoft);}
+.p2 .pillar-icon{background:var(--gsoft);}
+.p3 .pillar-icon{background:var(--blsoft);}
+.pillar-title{font-family:var(--disp);font-size:18px;font-weight:800;line-height:1.2;}
+.p1 .pillar-title{color:var(--acc2);}
+.p2 .pillar-title{color:var(--green);}
+.p3 .pillar-title{color:#6BA3FF;}
+.pillar-sub{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px;}
+/* MINI TABLE */
+.mini-table{width:100%;border-collapse:collapse;font-size:10.5px;}
+.mini-table th{padding:5px 7px;text-align:left;color:var(--muted);font-weight:600;border-bottom:1px solid var(--border);font-size:9.5px;}
+.mini-table td{padding:6px 7px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.mini-table tr:last-child td{border-bottom:none;}
+.tag{display:inline-flex;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;}
+.tag.r{background:var(--rsoft);color:var(--red);border:1px solid rgba(255,71,87,0.3);}
+.tag.g{background:var(--gsoft);color:var(--green);border:1px solid rgba(0,208,132,0.3);}
+.tag.a{background:var(--asoft);color:var(--amber);border:1px solid rgba(255,184,48,0.3);}
+.tag.m{background:var(--muted2);color:var(--muted);}
+/* PLATFORM LOGOS */
+.plat-logos{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+.plat-logo{padding:8px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surf2);font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px;}
+/* CHAT UI */
+.chat-ui{background:var(--surf2);border-radius:16px;padding:16px;border:1px solid var(--border);}
+.chat-msg{padding:10px 13px;border-radius:10px;font-size:12px;line-height:1.6;margin-bottom:8px;}
+.chat-msg.user{background:rgba(123,92,246,0.15);border:1px solid rgba(123,92,246,0.2);color:var(--acc2);}
+.chat-msg.ai{background:var(--surf);border:1px solid var(--border);}
+.chat-ai-name{font-size:10px;font-weight:700;color:var(--acc2);margin-bottom:5px;}
+.chat-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.chat-action-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surf);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+.checklist{display:flex;flex-direction:column;gap:8px;}
+.check-item{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--muted);}
+.check-item::before{content:'✓';color:var(--green);font-weight:700;font-size:14px;flex-shrink:0;margin-top:1px;}
+/* ANALYTICS SECTION */
+.analytics-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:24px;align-items:center;}
+.stat-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.stat-card{background:var(--surf);border:1px solid var(--border);border-radius:14px;padding:18px;}
+.sc-val{font-family:var(--disp);font-size:22px;font-weight:800;letter-spacing:-1px;margin-bottom:4px;}
+.sc-label{font-size:11px;color:var(--muted);margin-bottom:6px;}
+.sc-delta{font-size:11px;font-weight:600;}
+.chart-card{background:var(--surf);border:1px solid var(--border);border-radius:16px;padding:20px;}
+.cc-title{font-size:13px;font-weight:700;margin-bottom:4px;}
+.cc-val{font-family:var(--disp);font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:16px;}
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.price-card{background:var(--surf);border:1px solid var(--border);border-radius:20px;padding:28px;position:relative;transition:transform 0.2s;}
+.price-card:hover{transform:translateY(-4px);}
+.price-card.featured{border-color:var(--acc);background:linear-gradient(135deg,rgba(123,92,246,0.08),var(--surf));}
+.price-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--acc),#4F46E5);color:#fff;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
+.price-name{font-family:var(--disp);font-size:18px;font-weight:700;margin-bottom:6px;}
+.price-sub{font-size:12px;color:var(--muted);margin-bottom:20px;}
+.price-val{font-family:var(--disp);font-size:36px;font-weight:800;letter-spacing:-1.5px;line-height:1;}
+.price-period{font-size:13px;color:var(--muted);margin-bottom:24px;}
+.price-features{display:flex;flex-direction:column;gap:9px;margin-bottom:28px;}
+.pf-item{display:flex;align-items:center;gap:8px;font-size:13px;}
+.pf-item::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;}
+.pf-item.x{color:var(--muted);}
+.pf-item.x::before{content:'×';color:var(--muted);}
+/* CTA */
+#cta{padding:100px 0;text-align:center;position:relative;overflow:hidden;}
+.cta-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(123,92,246,0.12) 0%,transparent 70%);pointer-events:none;}
+.cta-title{font-family:var(--disp);font-size:48px;font-weight:800;letter-spacing:-2px;margin-bottom:16px;}
+.cta-title .acc{background:linear-gradient(135deg,var(--acc2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.cta-sub{font-size:17px;color:var(--muted);max-width:500px;margin:0 auto 36px;}
+.cta-note{font-size:13px;color:var(--muted);margin-top:14px;}
+.cta-badges{display:flex;align-items:center;justify-content:center;gap:20px;margin-top:36px;}
+.cta-badge-item{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;}
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:40px 0;margin-top:0;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;}
+.footer-brand{max-width:260px;}
+.footer-logo{display:flex;align-items:center;gap:9px;margin-bottom:14px;}
+.fl-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--acc),#4F46E5);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;}
+.fl-text{font-family:var(--disp);font-size:17px;font-weight:800;}
+.fl-text span{color:var(--acc2);}
+.footer-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:16px;}
+.footer-ma{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;background:var(--surf);border:1px solid var(--border);font-size:12px;font-weight:600;width:fit-content;}
+.footer-col-title{font-family:var(--disp);font-size:12px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+.footer-links{display:flex;flex-direction:column;gap:10px;}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:13px;transition:color 0.15s;}
+.footer-links a:hover{color:var(--text);}
+.footer-bottom{border-top:1px solid var(--border);margin-top:40px;padding-top:20px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted);}
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.animate{animation:fadeUp 0.6s ease forwards;}
+.float{animation:float 4s ease-in-out infinite;}
+/* RESPONSIVE HINT */
+@media(max-width:900px){
+  .hero-grid,.pillars,.pricing-grid,.features-grid,.analytics-grid,.footer-grid{grid-template-columns:1fr;}
+  .hero-title{font-size:38px;}
+  .section-title{font-size:28px;}
+  .nav-links{display:none;}
+  .mock-kpis{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-icon">N</div>
+    <div class="nav-logo-text">Nexa<span>Grow</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="#publicites">Publicités</a>
+    <a href="#ecommerce">E-commerce</a>
+    <a href="#ia">Agent IA</a>
+    <a href="#analytics">Analytics</a>
+    <a href="#tarifs">Tarifs</a>
+  </div>
+  <div class="nav-cta">
+    <a href="/login" class="btn-ghost">Se connecter</a>
+    <a href="/register" class="btn-primary">Essai gratuit 14j →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <!-- LEFT -->
+      <div style="animation:fadeUp 0.7s ease;">
+        <div class="hero-badge">🇲🇦 <span>100% MAROCAIN</span></div>
+        <h1 class="hero-title">La suite IA<br>tout-en-un pour<br>faire <span class="acc">croître</span> votre<br>PME <span class="acc">au Maroc</span></h1>
+        <p class="hero-sub">Marketing digital, e-commerce, et décisions business — automatisés par l'IA. Gérez tout depuis un seul tableau de bord.</p>
+        <div class="hero-actions">
+          <a href="/register" class="btn-primary btn-large">Démarrer maintenant →</a>
+          <a href="/login" class="btn-ghost" style="padding:14px 24px;font-size:15px;">Voir la démo</a>
+        </div>
+        <div class="hero-trust">
+          <div class="trust-item">IA Avancée</div>
+          <div class="trust-item">Données sécurisées</div>
+          <div class="trust-item">Support local</div>
+        </div>
+      </div>
+      <!-- MOCKUP -->
+      <div class="float" style="animation-delay:0.3s;">
+        <div class="mockup">
+          <div class="mock-topbar">
+            <div class="mock-logo">
+              <div class="mock-logo-i" style="color:#fff;font-size:9px;">N</div>
+              <span>NexaGrow</span>
+            </div>
+            <div style="font-size:12px;font-weight:700;">Tableau de bord</div>
+            <button class="mock-export">⬇ Exporter le rapport</button>
+          </div>
+          <div class="mock-body">
+            <div class="mock-period">Période: 30 derniers jours</div>
+            <div class="mock-kpis">
+              <div class="mock-kpi"><div class="mk-label">Chiffre d'affaires</div><div class="mk-value" style="font-size:13px;">1,248,420 MAD</div><div class="mk-delta up">↑ +18.6%</div></div>
+              <div class="mock-kpi"><div class="mk-label">Dépenses Pub</div><div class="mk-value" style="font-size:13px;">312,450 MAD</div><div class="mk-delta up">↑ +6.3%</div></div>
+              <div class="mock-kpi"><div class="mk-label">ROAS</div><div class="mk-value">4.00</div><div class="mk-delta up">↑ +22%</div></div>
+              <div class="mock-kpi"><div class="mk-label">Commandes</div><div class="mk-value">1,842</div><div class="mk-delta up">↑ +12.7%</div></div>
+            </div>
+            <div class="mock-charts">
+              <div class="mock-chart-card">
+                <div class="mc-title">Évolution du chiffre d'affaires</div>
+                <svg class="mini-chart" viewBox="0 0 200 50" preserveAspectRatio="none">
+                  <defs><linearGradient id="hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7B5CF6" stop-opacity="0.3"/><stop offset="100%" stop-color="#7B5CF6" stop-opacity="0"/></linearGradient></defs>
+                  <polygon points="0,50 10,42 30,38 50,35 70,30 90,25 110,28 130,18 150,12 170,8 190,4 200,2 200,50" fill="url(#hg)"/>
+                  <polyline points="10,42 30,38 50,35 70,30 90,25 110,28 130,18 150,12 170,8 190,4 200,2" fill="none" stroke="#7B5CF6" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <div style="display:flex;justify-content:space-between;font-size:7.5px;color:var(--muted);margin-top:3px;">
+                  <span>Mai</span><span>Juil</span><span>Sept</span><span>Nov</span><span>Janv</span><span>Mars</span><span>Avr</span>
+                </div>
+              </div>
+              <div class="mock-chart-card">
+                <div class="mc-title">Répartition par canal</div>
+                <div class="donut-wrap" style="flex-direction:row;align-items:center;height:auto;">
+                  <svg width="60" height="60" viewBox="0 0 60 60">
+                    <circle cx="30" cy="30" r="22" fill="none" stroke="#1E2240" stroke-width="10"/>
+                    <circle cx="30" cy="30" r="22" fill="none" stroke="#1877F2" stroke-width="10" stroke-dasharray="62 76" stroke-dashoffset="0" transform="rotate(-90 30 30)"/>
+                    <circle cx="30" cy="30" r="22" fill="none" stroke="#EA4335" stroke-width="10" stroke-dasharray="41 97" stroke-dashoffset="-62" transform="rotate(-90 30 30)"/>
+                    <circle cx="30" cy="30" r="22" fill="none" stroke="#00D084" stroke-width="10" stroke-dasharray="35 103" stroke-dashoffset="-103" transform="rotate(-90 30 30)"/>
+                  </svg>
+                  <div class="donut-legend">
+                    <div class="dl-item"><div class="dl-dot" style="background:#1877F2"></div>Meta Ads 45%</div>
+                    <div class="dl-item"><div class="dl-dot" style="background:#EA4335"></div>Google Ads 30%</div>
+                    <div class="dl-item"><div class="dl-dot" style="background:#00D084"></div>TikTok Ads 25%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:10px;">
+              <div>
+                <div class="mock-alert-title">Alertes importantes <span style="background:var(--surf2);border-radius:4px;padding:1px 5px;font-size:9px;">ℹ</span></div>
+                <div class="mock-alert r">🔴 TikTok Ads sous le seuil de rentabilité depuis 2 jours.<span class="mock-alert-tag">Alerte</span></div>
+                <div class="mock-alert a">📦 Rupture de stock prévue dans 6h : Djellaba Premium (Taille M).<span class="mock-alert-tag">Stock</span></div>
+                <div class="mock-alert b">📊 Taux d'abandon de panier élevé : 72% sur les 3 derniers jours.<span class="mock-alert-tag">Action</span></div>
+              </div>
+              <div class="mock-reco">
+                <div class="mock-reco-title">Recommandation IA</div>
+                <div class="mock-reco-text">Redirigez 2 300 MAD de TikTok vers Google Shopping →</div>
+                <div class="mock-reco-gain">gain estimé +14 600 MAD/mois</div>
+                <button class="mock-reco-btn">Appliquer maintenant</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILIER 1: PUBLICITES -->
+<section id="publicites" style="background:var(--surf);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:center;">
+      <div>
+        <div class="section-badge sb-purple">📣 Media Buyer IA</div>
+        <h2 class="section-title">Gérez vos publicités<br>comme un <span style="color:var(--acc2);">pro</span></h2>
+        <p class="section-sub">Pilotez Meta Ads, Google Ads et TikTok Ads depuis un seul endroit. L'IA optimise automatiquement vos campagnes.</p>
+        <div class="plat-logos" style="margin-top:24px;">
+          <div class="plat-logo"><span style="font-size:16px;">🟦</span> Meta Ads</div>
+          <div class="plat-logo"><span style="font-size:16px;">🔴</span> Google Ads</div>
+          <div class="plat-logo"><span style="font-size:16px;">⬛</span> TikTok Ads</div>
+        </div>
+        <div class="checklist" style="margin-top:20px;">
+          <div class="check-item">Alertes en temps réel si une campagne devient non rentable</div>
+          <div class="check-item">Recommandations chiffrées par l'IA (ROAS, CPA, ROI)</div>
+          <div class="check-item">Génération de campagnes, audiences et textes publicitaires</div>
+          <div class="check-item">A/B testing automatisé avec analyse des résultats</div>
+        </div>
+      </div>
+      <!-- TABLE MOCKUP -->
+      <div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:20px;">
+          <div style="font-size:12px;font-weight:700;margin-bottom:14px;">📊 Performance campagnes — Cette semaine</div>
+          <table class="mini-table">
+            <thead><tr><th>Plateforme</th><th>Dépenses</th><th>ROAS</th><th>CPA</th><th>Revenus</th></tr></thead>
+            <tbody>
+              <tr><td><div style="display:flex;align-items:center;gap:5px;"><span style="font-size:13px;">🟦</span> Meta Ads</div></td><td>120,450 MAD</td><td class="tg fw7">3.25</td><td>45 MAD</td><td class="tg">391,460 MAD</td></tr>
+              <tr><td><div style="display:flex;align-items:center;gap:5px;"><span style="font-size:13px;">🔴</span> Google Ads</div></td><td>112,000 MAD</td><td class="tg fw7">5.10</td><td>38 MAD</td><td class="tg">571,200 MAD</td></tr>
+              <tr style="background:rgba(255,71,87,0.05);"><td><div style="display:flex;align-items:center;gap:5px;"><span style="font-size:13px;">⬛</span> TikTok Ads</div></td><td>80,000 MAD</td><td class="tr fw7">1.40</td><td>85 MAD</td><td>112,000 MAD</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:14px;background:rgba(255,71,87,0.08);border:1px solid rgba(255,71,87,0.25);border-radius:10px;padding:11px 13px;font-size:11px;line-height:1.6;">
+            🦙 <strong style="color:var(--acc2);">Recommandation Llama 3 :</strong> TikTok non rentable (ROAS 1.4×). Pausez et réallouez 80 000 MAD vers Google Ads. Gain estimé : <strong style="color:var(--green);">+320 000 MAD/mois</strong>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILIER 2: ECOMMERCE -->
+<section id="ecommerce">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:60px;align-items:center;">
+      <!-- TABLE MOCKUP -->
+      <div>
+        <div style="background:var(--surf);border:1px solid var(--border);border-radius:16px;padding:20px;">
+          <div style="font-size:12px;font-weight:700;margin-bottom:14px;">🛍 Gestion Produits — Performance</div>
+          <table class="mini-table">
+            <thead><tr><th>Produit</th><th>Statut</th><th>Marge</th><th>Ventes (30j)</th></tr></thead>
+            <tbody>
+              <tr><td>Djellaba Premium</td><td><span class="tag r">Rupture dans 6h</span></td><td>48%</td><td class="fw7">213</td></tr>
+              <tr><td>Huile d'Argan Bio</td><td><span class="tag g">Produit star</span></td><td>62%</td><td class="fw7 tg">342</td></tr>
+              <tr><td>Caftan Chic</td><td><span class="tag a">Faible demande</span></td><td>25%</td><td class="fw7 ta">28</td></tr>
+              <tr><td>Savon Noir</td><td><span class="tag m">Stock mort</span></td><td>15%</td><td class="fw7 tr">12</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:14px;display:flex;flex-direction:column;gap:6px;">
+            <div class="check-item" style="font-size:11.5px;">Alertes de rupture de stock avec estimation</div>
+            <div class="check-item" style="font-size:11.5px;">Optimisation automatique des prix</div>
+            <div class="check-item" style="font-size:11.5px;">Suivi des abandons de panier et actions correctives</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="section-badge sb-green">🛒 E-commerce Manager</div>
+        <h2 class="section-title">Gérez votre e-commerce<br>comme un <span style="color:var(--green);">manager expert</span></h2>
+        <p class="section-sub">Connectez votre boutique et optimisez chaque aspect de vos ventes grâce à l'intelligence artificielle.</p>
+        <div class="plat-logos" style="margin-top:24px;">
+          <div class="plat-logo"><span>🟢</span> Shopify</div>
+          <div class="plat-logo"><span>🟣</span> WooCommerce</div>
+          <div class="plat-logo"><span>🔵</span> PrestaShop</div>
+        </div>
+        <div class="checklist" style="margin-top:20px;">
+          <div class="check-item">Détection des produits stars et à faible rotation</div>
+          <div class="check-item">Suggestions de prix optimisés par l'IA</div>
+          <div class="check-item">Prévisions de CA basées sur l'historique</div>
+          <div class="check-item">Rapports automatiques quotidiens et hebdomadaires</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILIER 3: IA -->
+<section id="ia" style="background:var(--surf);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1.1fr;gap:60px;align-items:center;">
+      <div>
+        <div class="section-badge sb-blue">🤖 Agent IA 24h/24</div>
+        <h2 class="section-title">Travaillez avec un<br><span style="color:#6BA3FF;">agent IA disponible</span><br>24h/24</h2>
+        <p class="section-sub">Posez vos questions en français, darija ou anglais et obtenez des réponses instantanées basées sur vos vraies données.</p>
+        <div class="chat-actions" style="margin-top:24px;">
+          <div class="chat-action-btn">📋 Rapport exécutif</div>
+          <div class="chat-action-btn">📈 Prévisions CA</div>
+          <div class="chat-action-btn">💰 Budget optimal</div>
+        </div>
+      </div>
+      <!-- CHAT UI -->
+      <div class="chat-ui">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+          <div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--acc),#4F46E5);display:flex;align-items:center;justify-content:center;font-size:15px;">🦙</div>
+          <div><div style="font-size:12px;font-weight:700;">Agent NexaGrow · Llama 3</div><div style="font-size:10px;color:var(--green);">● Groq · Actif</div></div>
+        </div>
+        <div class="chat-msg user">Salam, chno hiya performance ديال Google Ads had l'semaine?</div>
+        <div class="chat-msg ai">
+          <div class="chat-ai-name">🦙 Agent NexaGrow</div>
+          Salam ! 👋<br><br>
+          Google Ads a généré un ROAS de <strong>5.1×</strong> cette semaine avec un CA de <strong style="color:var(--green);">571,200 MAD</strong> sur une dépense de 112,000 MAD.<br><br>
+          Je recommande d'augmenter le budget de <strong>15%</strong> pour capter plus de conversions.
+        </div>
+        <div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap;">
+          <button style="padding:5px 11px;border-radius:16px;border:1px solid var(--border);background:none;color:var(--muted);font-size:10.5px;cursor:pointer;font-family:var(--font);">Analyser TikTok</button>
+          <button style="padding:5px 11px;border-radius:16px;border:1px solid var(--border);background:none;color:var(--muted);font-size:10.5px;cursor:pointer;font-family:var(--font);">Rapport semaine</button>
+          <button style="padding:5px 11px;border-radius:16px;border:1px solid var(--border);background:none;color:var(--muted);font-size:10.5px;cursor:pointer;font-family:var(--font);">Stock urgent</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANALYTICS -->
+<section id="analytics">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px;">
+      <div class="section-badge sb-purple" style="margin:0 auto 16px;">📊 Analytics & BI</div>
+      <h2 class="section-title" style="margin:0 auto;">Prenez de meilleures décisions<br><span style="color:var(--acc2);">grâce aux données</span></h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+      <!-- CA Chart -->
+      <div class="chart-card">
+        <div class="cc-title">Chiffre d'affaires (12 mois)</div>
+        <div class="cc-val">12,842,400 MAD <span style="font-size:14px;font-weight:600;" class="tg">+24.5%</span></div>
+        <svg width="100%" height="100" viewBox="0 0 400 100" preserveAspectRatio="none">
+          <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7B5CF6" stop-opacity="0.3"/><stop offset="100%" stop-color="#7B5CF6" stop-opacity="0"/></linearGradient></defs>
+          <polygon points="0,100 30,90 60,85 90,78 120,70 150,60 180,62 210,45 240,35 270,22 300,15 330,10 360,6 390,2 400,0 400,100" fill="url(#ag)"/>
+          <polyline points="30,90 60,85 90,78 120,70 150,60 180,62 210,45 240,35 270,22 300,15 330,10 360,6 390,2" fill="none" stroke="#7B5CF6" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:8px;">
+          <span>Mai</span><span>Juil</span><span>Sept</span><span>Nov</span><span>Janv</span><span>Mars</span><span>Avr</span>
+        </div>
+      </div>
+      <!-- Forecast -->
+      <div class="chart-card">
+        <div class="cc-title">Prévisions (30 prochains jours)</div>
+        <div class="cc-val">1,485,000 MAD <span style="font-size:14px;font-weight:600;" class="tg">+15.2%</span></div>
+        <svg width="100%" height="100" viewBox="0 0 400 100" preserveAspectRatio="none">
+          <defs><linearGradient id="fg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00D084" stop-opacity="0.25"/><stop offset="100%" stop-color="#00D084" stop-opacity="0"/></linearGradient></defs>
+          <polygon points="0,100 40,88 80,78 120,65 160,55 200,48 240,100" fill="url(#fg)"/>
+          <polyline points="40,88 80,78 120,65 160,55 200,48" fill="none" stroke="#00D084" stroke-width="2" stroke-linecap="round"/>
+          <!-- Forecast dashed -->
+          <polyline points="200,48 240,42 280,36 320,30 360,24 400,20" fill="none" stroke="#00D084" stroke-width="2" stroke-dasharray="6,4" opacity="0.7"/>
+          <text x="340" y="30" fill="#00D084" font-size="9" font-family="sans-serif">Prévision</text>
+          <text x="340" y="52" fill="#6B7A9F" font-size="9" font-family="sans-serif">Réel</text>
+        </svg>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:8px;">
+          <span>Mai</span><span>Juil</span><span>Sept</span><span>Nov</span><span>Janv</span><span>Mars</span><span>Avr</span>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px;">
+      <div class="stat-card"><div class="sc-label">ROAS global moyen</div><div class="sc-val tg">4.0×</div><div class="sc-delta tg">↑ +22% ce mois</div></div>
+      <div class="stat-card"><div class="sc-label">CPA moyen</div><div class="sc-val">45 MAD</div><div class="sc-delta tg">↓ -18% (mieux)</div></div>
+      <div class="stat-card"><div class="sc-label">Taux de conversion</div><div class="sc-val">3.8%</div><div class="sc-delta tg">↑ +0.6pt</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TARIFS -->
+<section id="tarifs" style="background:var(--surf);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px;">
+      <div class="section-badge sb-purple" style="margin:0 auto 16px;">💰 Tarifs transparents</div>
+      <h2 class="section-title" style="margin:0 auto;">Choisissez votre plan</h2>
+      <p style="font-size:15px;color:var(--muted);margin-top:12px;">Aucune carte bancaire requise pour l'essai gratuit 14 jours</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Starter</div>
+        <div class="price-sub">Pour démarrer</div>
+        <div class="price-val">499</div>
+        <div class="price-period">MAD / mois</div>
+        <div class="price-features">
+          <div class="pf-item">1 boutique e-commerce</div>
+          <div class="pf-item">2 plateformes publicitaires</div>
+          <div class="pf-item">Agent IA (100 messages/mois)</div>
+          <div class="pf-item">Rapport hebdomadaire</div>
+          <div class="pf-item x">A/B Testing IA</div>
+          <div class="pf-item x">Multi-utilisateurs</div>
+        </div>
+        <a href="/register" class="btn-ghost" style="width:100%;justify-content:center;display:flex;padding:11px;">Essayer gratuitement</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">⭐ Plus populaire</div>
+        <div class="price-name" style="color:var(--acc2);">Pro</div>
+        <div class="price-sub">Pour les PME en croissance</div>
+        <div class="price-val">1,299</div>
+        <div class="price-period">MAD / mois</div>
+        <div class="price-features">
+          <div class="pf-item">3 boutiques e-commerce</div>
+          <div class="pf-item">Toutes les plateformes ads</div>
+          <div class="pf-item">Agent IA illimité (Llama 3)</div>
+          <div class="pf-item">Rapports automatiques quotidiens</div>
+          <div class="pf-item">A/B Testing IA avancé</div>
+          <div class="pf-item">5 utilisateurs</div>
+        </div>
+        <a href="/register" class="btn-primary" style="width:100%;justify-content:center;padding:12px;">Démarrer le Pro →</a>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Entreprise</div>
+        <div class="price-sub">Pour les grandes équipes</div>
+        <div class="price-val">Sur devis</div>
+        <div class="price-period">&nbsp;</div>
+        <div class="price-features">
+          <div class="pf-item">Boutiques illimitées</div>
+          <div class="pf-item">API personnalisée</div>
+          <div class="pf-item">IA custom (modèle dédié)</div>
+          <div class="pf-item">Support prioritaire 24/7</div>
+          <div class="pf-item">Intégrations sur mesure</div>
+          <div class="pf-item">Utilisateurs illimités</div>
+        </div>
+        <a href="mailto:contact@nexagrow.ma" class="btn-ghost" style="width:100%;justify-content:center;display:flex;padding:11px;">Nous contacter</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-bg"></div>
+  <div class="container" style="text-align:center;position:relative;">
+    <div style="font-size:48px;margin-bottom:20px;">🇲🇦</div>
+    <h2 class="cta-title">Conçu au Maroc,<br>pour les PME <span class="acc">marocaines</span></h2>
+    <p class="cta-sub">Hébergé au Maroc · Conforme à la loi 09-08 · Support local · Données 100% sécurisées</p>
+    <a href="/register" class="btn-primary btn-large" style="font-size:17px;padding:16px 40px;">Démarrer maintenant →</a>
+    <div class="cta-note">Essayez NexaGrow gratuitement pendant 14 jours. Aucune carte bancaire requise.</div>
+    <div class="cta-badges">
+      <div class="cta-badge-item">🇲🇦 100% marocain</div>
+      <div class="cta-badge-item">🦙 IA Llama 3 puissante</div>
+      <div class="cta-badge-item">🚀 Résultats concrets</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="fl-icon">N</div>
+          <div class="fl-text">Nexa<span>Grow</span></div>
+        </div>
+        <p class="footer-desc">La suite IA tout-en-un pour les PME marocaines. Marketing digital, e-commerce et décisions business automatisés.</p>
+        <div class="footer-ma">🇲🇦 Conçu et hébergé au Maroc</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Produit</div>
+        <div class="footer-links">
+          <a href="#publicites">Media Buyer IA</a>
+          <a href="#ecommerce">E-commerce Manager</a>
+          <a href="#ia">Agent IA</a>
+          <a href="#analytics">Analytics</a>
+          <a href="#tarifs">Tarifs</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Ressources</div>
+        <div class="footer-links">
+          <a href="#">Documentation</a>
+          <a href="#">Guide démarrage</a>
+          <a href="#">Cas clients</a>
+          <a href="#">Blog</a>
+          <a href="#">API</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Support</div>
+        <div class="footer-links">
+          <a href="#">Centre d'aide</a>
+          <a href="mailto:contact@nexagrow.ma">contact@nexagrow.ma</a>
+          <a href="#">WhatsApp Support</a>
+          <a href="#">Politique de confidentialité</a>
+          <a href="#">CGU</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 NexaGrow. Tous droits réservés. 🇲🇦</span>
+      <span>Conforme à la loi 09-08 sur la protection des données personnelles</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Smooth animations on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.style.animation = 'fadeUp 0.6s ease forwards'; });
+}, { threshold: 0.1 });
+document.querySelectorAll('section > .container > *').forEach(el => observer.observe(el));
+
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  nav.style.background = window.scrollY > 50 ? 'rgba(7,8,13,0.95)' : 'rgba(7,8,13,0.85)';
+});
+</script>
+</body>
+</html>

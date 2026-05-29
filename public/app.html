@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexaGrow — AI Marketing Suite</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#07080C;--surf:#0E1018;--surf2:#141720;--border:#1C2032;--border2:#252A3C;
+  --acc:#4F6EF7;--acc2:#3451D1;--accsoft:#4F6EF712;--accbdr:#4F6EF733;
+  --green:#0ECB81;--gsoft:#0ECB8112;--gbdr:#0ECB8133;
+  --red:#F0464A;--rsoft:#F0464A12;--rbdr:#F0464A33;
+  --amber:#F5A623;--asoft:#F5A62312;--abdr:#F5A62333;
+  --text:#DDE1EE;--muted:#5A6280;--muted2:#3A4060;
+  --font:'Instrument Sans',sans-serif;--mono:'JetBrains Mono',monospace;--disp:'Syne',sans-serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;display:flex;overflow:hidden;}
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+/* SIDEBAR */
+#sb{width:224px;min-width:224px;background:var(--surf);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;}
+.logo-w{padding:20px 16px 18px;border-bottom:1px solid var(--border);}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-i{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--acc),#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.logo-t{font-family:var(--disp);font-weight:800;font-size:16px;letter-spacing:-0.5px;}
+.logo-s{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px;}
+nav{flex:1;padding:8px 6px;overflow-y:auto;}
+.nav-sec{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;padding:10px 10px 4px;}
+.nb{width:100%;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:var(--muted);font-size:12.5px;font-family:var(--font);font-weight:500;text-align:left;transition:all 0.14s;margin-bottom:1px;}
+.nb:hover{background:var(--surf2);color:var(--text);}
+.nb.active{background:var(--accsoft);color:var(--acc);border:1px solid var(--accbdr);}
+.nb .ic{font-size:14px;width:17px;text-align:center;flex-shrink:0;}
+.nb .bdg{margin-left:auto;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:7px;}
+.sb-user{padding:12px;border-top:1px solid var(--border);}
+.u-card{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:9px;background:var(--surf2);}
+.u-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--green));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.u-name{font-size:11.5px;font-weight:600;}
+.u-plan{font-size:10px;color:var(--muted);}
+.on-dot{width:6px;height:6px;border-radius:50%;background:var(--green);margin-left:auto;box-shadow:0 0 5px var(--green);}
+/* MAIN */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;height:100vh;}
+#topbar{padding:0 24px;height:56px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;}
+.pg-title{font-family:var(--disp);font-weight:700;font-size:15px;flex:1;}
+.tb-chip{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;font-size:11.5px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all 0.14s;font-family:var(--font);}
+.tb-chip.warn{background:var(--asoft);border-color:var(--abdr);color:var(--amber);}
+.btn-ai{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;background:linear-gradient(135deg,var(--acc),#7C3AED);border:none;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);transition:opacity 0.14s;}
+.btn-ai:hover{opacity:0.88;}
+#content{flex:1;overflow-y:auto;padding:22px 24px;}
+/* CARDS */
+.card{background:var(--surf);border:1px solid var(--border);border-radius:13px;padding:18px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;}
+.mb13{margin-bottom:13px;}
+.mb18{margin-bottom:18px;}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
+/* KPI */
+.kpi-l{font-size:10px;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:7px;}
+.kpi-v{font-family:var(--disp);font-size:28px;font-weight:800;letter-spacing:-1.5px;line-height:1;}
+.kpi-d{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;margin-top:6px;}
+.kpi-d.up{color:var(--green);}
+.kpi-d.dn{color:var(--red);}
+/* TABLE */
+.tw{overflow:auto;}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:var(--bg);}
+th{padding:8px 13px;text-align:left;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:0.8px;text-transform:uppercase;white-space:nowrap;}
+td{padding:10px 13px;font-size:12px;border-top:1px solid var(--border);}
+.tr:hover td{background:var(--surf2);}
+.tr{cursor:pointer;transition:background 0.12s;}
+/* BADGE */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:5px;font-size:10.5px;font-weight:600;}
+.badge.g{background:var(--gsoft);color:var(--green);}
+.badge.r{background:var(--rsoft);color:var(--red);}
+.badge.a{background:var(--asoft);color:var(--amber);}
+.badge.b{background:var(--accsoft);color:var(--acc);}
+.badge.m{background:var(--surf2);color:var(--muted);}
+.dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+/* BUTTONS */
+.btn{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:var(--font);transition:all 0.14s;display:inline-flex;align-items:center;gap:5px;}
+.bp{background:var(--acc);color:#fff;}
+.bp:hover{background:var(--acc2);}
+.bo{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.bo:hover{border-color:var(--border2);color:var(--text);}
+.bg{background:var(--gsoft);color:var(--green);border:1px solid var(--gbdr);}
+.br{background:var(--rsoft);color:var(--red);border:1px solid var(--rbdr);}
+.btn:disabled{opacity:0.45;cursor:not-allowed;}
+/* ALERT */
+.alert{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:10px;font-size:12px;margin-bottom:7px;}
+.alert.w{background:var(--asoft);border:1px solid var(--abdr);}
+.alert.i{background:var(--accsoft);border:1px solid var(--accbdr);}
+.alert.s{background:var(--gsoft);border:1px solid var(--gbdr);}
+.a-time{margin-left:auto;font-size:10px;color:var(--muted);white-space:nowrap;flex-shrink:0;}
+/* BARS */
+.brow{margin-bottom:11px;}
+.bmeta{display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px;}
+.btrack{height:5px;border-radius:5px;background:var(--border);}
+.bfill{height:100%;border-radius:5px;transition:width 0.5s ease;}
+/* SPARK */
+.spark{width:100%;height:52px;}
+/* PLAT */
+.plat{width:20px;height:20px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;}
+.plat.meta{background:#1877F2;}
+.plat.google{background:#EA4335;}
+.plat.tiktok{background:#111;border:1px solid #444;}
+/* CHAT */
+#chat{position:fixed;bottom:20px;right:20px;width:390px;max-height:560px;background:var(--surf);border:1px solid var(--border);border-radius:16px;display:flex;flex-direction:column;z-index:9000;box-shadow:0 24px 70px rgba(0,0,0,0.7);overflow:hidden;transition:all 0.22s;}
+#chat.hid{transform:translateY(16px) scale(0.96);opacity:0;pointer-events:none;}
+.ch{padding:13px 16px;border-bottom:1px solid var(--border);background:var(--bg);display:flex;align-items:center;gap:10px;}
+.c-av{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--acc),#7C3AED);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.c-name{font-weight:700;font-size:12.5px;}
+.c-status{font-size:10px;color:var(--green);display:flex;align-items:center;gap:3px;}
+.c-status::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--green);display:inline-block;}
+.c-close{margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;font-size:19px;line-height:1;padding:2px;}
+.c-body{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:0;}
+.msg{max-width:84%;padding:9px 12px;border-radius:11px;font-size:12px;line-height:1.65;white-space:pre-wrap;}
+.msg.ai{background:var(--surf2);align-self:flex-start;border-radius:11px 11px 11px 3px;}
+.msg.user{background:var(--acc);color:#fff;align-self:flex-end;border-radius:11px 11px 3px 11px;}
+.typing{display:flex;gap:4px;padding:9px 12px;background:var(--surf2);border-radius:11px 11px 11px 3px;align-self:flex-start;}
+.typing span{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:tb 1.2s ease-in-out infinite;}
+.typing span:nth-child(2){animation-delay:0.2s;}
+.typing span:nth-child(3){animation-delay:0.4s;}
+@keyframes tb{0%,80%,100%{transform:translateY(0);}40%{transform:translateY(-5px);}}
+.c-sugs{padding:0 9px 6px;display:flex;flex-wrap:wrap;gap:4px;}
+.sug{font-size:10.5px;padding:3px 9px;border-radius:14px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;font-family:var(--font);transition:all 0.12s;}
+.sug:hover{border-color:var(--acc);color:var(--acc);}
+.c-inp{padding:7px 9px 9px;border-top:1px solid var(--border);display:flex;gap:6px;}
+.c-inp input{flex:1;background:var(--surf2);border:1px solid var(--border);border-radius:9px;padding:8px 12px;color:var(--text);font-size:12px;outline:none;font-family:var(--font);}
+.c-inp input::placeholder{color:var(--muted);}
+.csend{width:36px;height:36px;border-radius:9px;background:var(--acc);border:none;cursor:pointer;color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity 0.14s;}
+.csend:disabled{opacity:0.4;cursor:not-allowed;}
+/* FAB */
+#fab{position:fixed;bottom:20px;right:20px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--acc),#7C3AED);border:none;cursor:pointer;font-size:21px;box-shadow:0 7px 25px #4F6EF760;transition:all 0.18s;z-index:8999;}
+#fab:hover{transform:scale(1.08);}
+/* MODAL */
+.mover{position:fixed;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:9500;padding:18px;}
+.modal{background:var(--surf);border:1px solid var(--border);border-radius:16px;width:100%;max-width:640px;max-height:84vh;display:flex;flex-direction:column;animation:fu 0.22s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.mh{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.mt{font-family:var(--disp);font-weight:700;font-size:14px;}
+.mc{background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;line-height:1;}
+.mb{flex:1;overflow-y:auto;padding:18px 20px;}
+.mf{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;}
+/* FORM */
+.fg{margin-bottom:13px;}
+.fl{display:block;font-size:10.5px;font-weight:600;color:var(--muted);letter-spacing:0.6px;text-transform:uppercase;margin-bottom:5px;}
+.fi,.fs,.fta{width:100%;background:var(--surf2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:12.5px;font-family:var(--font);outline:none;transition:border-color 0.14s;}
+.fi:focus,.fs:focus,.fta:focus{border-color:var(--acc);}
+.fta{resize:vertical;min-height:75px;}
+.fs option{background:var(--surf2);}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+/* TOGGLE */
+.tog{width:38px;height:21px;border-radius:10px;border:none;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;}
+.tog.on{background:var(--green);}
+.tog.off{background:var(--border2);}
+.tog::after{content:'';position:absolute;top:3px;width:15px;height:15px;border-radius:50%;background:#fff;transition:left 0.18s;}
+.tog.on::after{left:20px;}
+.tog.off::after{left:3px;}
+/* INTEG */
+.ic-wrap{background:var(--surf);border:1px solid var(--border);border-radius:13px;padding:16px;display:flex;align-items:center;gap:13px;transition:border-color 0.2s;}
+.ic-wrap.conn{border-color:var(--gbdr);}
+.ic-icon{width:44px;height:44px;border-radius:11px;background:var(--surf2);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+/* MISC */
+.rc{font-family:var(--mono);font-size:12px;line-height:1.8;white-space:pre-wrap;}
+.rc strong{color:var(--acc);}
+.api-s{display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:9px;font-size:12px;font-weight:600;}
+.api-s.ok{background:var(--gsoft);border:1px solid var(--gbdr);color:var(--green);}
+.api-s.err{background:var(--rsoft);border:1px solid var(--rbdr);color:var(--red);}
+@keyframes fi{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+.page{animation:fi 0.22s ease;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.45;}}
+.pulse{animation:pulse 1.8s ease-in-out infinite;}
+.divider{height:1px;background:var(--border);margin:14px 0;}
+.fw7{font-weight:700;}
+.mono{font-family:var(--mono);}
+.tg{color:var(--green);}
+.tr2{color:var(--red);}
+.ta{color:var(--amber);}
+.tacc{color:var(--acc);}
+.tm{color:var(--muted);}
+.fs11{font-size:11px;}
+.fs12{font-size:12px;}
+</style>
+</head>
+<body>
+
+<aside id="sb">
+  <div class="logo-w">
+    <div class="logo">
+      <div class="logo-i">⚡</div>
+      <div>
+        <div class="logo-t">NexaGrow</div>
+        <div class="logo-s">AI Marketing Suite</div>
+      </div>
+    </div>
+  </div>
+  <nav>
+    <div class="nav-sec">Principal</div>
+    <button class="nb active" onclick="go('dashboard')"><span class="ic">▦</span>Dashboard<span class="bdg" id="alert-badge" style="display:none">0</span></button>
+    <button class="nb" onclick="go('campaigns')"><span class="ic">📡</span>Campagnes</button>
+    <button class="nb" onclick="go('ecommerce')"><span class="ic">🛍</span>E-commerce</button>
+    <button class="nb" onclick="go('analytics')"><span class="ic">📊</span>Analytics</button>
+    <div class="nav-sec">Intelligence IA</div>
+    <button class="nb" onclick="aiReport()"><span class="ic">✨</span>Rapport IA</button>
+    <button class="nb" onclick="aiAB()"><span class="ic">⚗️</span>A/B Testing</button>
+    <button class="nb" onclick="aiCopy()"><span class="ic">✍️</span>Textes Pub</button>
+    <button class="nb" onclick="aiAudience()"><span class="ic">🎯</span>Audiences</button>
+    <div class="nav-sec">Système</div>
+    <button class="nb" onclick="go('integrations')"><span class="ic">🔌</span>Intégrations</button>
+    <button class="nb" onclick="go('settings')"><span class="ic">⚙</span>Paramètres</button>
+    <button class="nb" onclick="logout()"><span class="ic">🚪</span>Déconnexion</button>
+  </nav>
+  <div class="sb-user">
+    <div class="u-card">
+      <div class="u-av" id="u-av">?</div>
+      <div>
+        <div class="u-name" id="u-name">—</div>
+        <div class="u-plan" id="u-plan">—</div>
+      </div>
+      <div class="on-dot"></div>
+    </div>
+  </div>
+</aside>
+
+<div id="main">
+  <header id="topbar">
+    <div class="pg-title" id="pg-title">Dashboard</div>
+    <div style="display:flex;align-items:center;gap:10px;" id="topbar-right">
+      <button class="tb-chip warn" id="alert-btn" style="display:none" onclick="go('dashboard')">⚠️ <span id="alert-count">0</span> alerte(s)</button>
+      <button class="btn-ai" onclick="openChat()">🦙 Ask Llama</button>
+    </div>
+  </header>
+  <div id="content"></div>
+</div>
+
+<button id="fab" onclick="openChat()">🦙</button>
+
+<div id="chat" class="hid">
+  <div class="ch">
+    <div class="c-av">🦙</div>
+    <div>
+      <div class="c-name">Agent NexaGrow · Llama 3</div>
+      <div class="c-status">Groq · Actif</div>
+    </div>
+    <button class="c-close" onclick="closeChat()">×</button>
+  </div>
+  <div class="c-body" id="c-body"></div>
+  <div class="c-sugs" id="c-sugs">
+    <button class="sug" onclick="qa('Analyse mes campagnes et donne 3 recommandations chiffrées')">Analyser campagnes</button>
+    <button class="sug" onclick="qa('Génère un rapport hebdomadaire complet')">Rapport semaine</button>
+    <button class="sug" onclick="qa('Quels produits réapprovisionner en urgence?')">Stock urgent</button>
+    <button class="sug" onclick="qa('Comment améliorer mon ROAS TikTok?')">ROAS TikTok</button>
+  </div>
+  <div class="c-inp">
+    <input id="ci" placeholder="Posez votre question…" onkeydown="if(event.key==='Enter')sendChat()"/>
+    <button class="csend" id="csend" onclick="sendChat()">↑</button>
+  </div>
+</div>
+
+<div id="mover" style="display:none;" onclick="closeMod(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="mh"><div class="mt" id="m-title">—</div><button class="mc" onclick="closeMod()">×</button></div>
+    <div class="mb" id="m-body"></div>
+    <div class="mf" id="m-foot"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let user = null;
+let campaigns = [];
+let products = [];
+let alerts = [];
+let integrations = {};
+let chatMsgs = [];
+let curPage = 'dashboard';
+
+// ═══════════════════════════════════════════════════════
+// API CALLS (all via backend, no key exposed)
+// ═══════════════════════════════════════════════════════
+async function api(method, path, body) {
+  const opts = { method, credentials: 'include', headers: {} };
+  if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
+  const r = await fetch(path, opts);
+  if (r.status === 401) { window.location.href = '/login'; return null; }
+  return r.json();
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+async function init() {
+  const me = await api('GET', '/api/auth/me');
+  if (!me || !me.user) { window.location.href = '/login'; return; }
+  user = me.user;
+  document.getElementById('u-name').textContent = user.name;
+  document.getElementById('u-plan').textContent = (user.company || '') + ' · ' + (user.plan || 'starter');
+  document.getElementById('u-av').textContent = user.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+  await Promise.all([loadCampaigns(), loadProducts(), loadAlerts(), loadIntegrations()]);
+  renderPage('dashboard');
+  updateAlertBadge();
+}
+
+async function loadCampaigns() { campaigns = await api('GET', '/api/campaigns') || []; }
+async function loadProducts() { products = await api('GET', '/api/products') || []; }
+async function loadAlerts() { alerts = await api('GET', '/api/alerts') || []; }
+async function loadIntegrations() { integrations = await api('GET', '/api/integrations') || {}; }
+
+function updateAlertBadge() {
+  const unread = alerts.filter(a => !a.read).length;
+  const badge = document.getElementById('alert-badge');
+  const btn = document.getElementById('alert-btn');
+  const count = document.getElementById('alert-count');
+  if (unread > 0) {
+    badge.textContent = unread; badge.style.display = '';
+    count.textContent = unread; btn.style.display = '';
+  } else { badge.style.display = 'none'; btn.style.display = 'none'; }
+}
+
+async function logout() {
+  await api('POST', '/api/auth/logout');
+  window.location.href = '/login';
+}
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+function go(page) {
+  curPage = page;
+  document.querySelectorAll('.nb').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b => {
+    if (b.getAttribute('onclick') === `go('${page}')`) b.classList.add('active');
+  });
+  const titles = { dashboard:'Dashboard', campaigns:'Campagnes Publicitaires', ecommerce:'E-commerce Manager', analytics:'Analytics & BI', integrations:'Intégrations & API', settings:'Paramètres' };
+  document.getElementById('pg-title').textContent = titles[page] || page;
+  renderPage(page);
+}
+
+function renderPage(p) {
+  const renders = { dashboard:renderDashboard, campaigns:renderCampaigns, ecommerce:renderEcommerce, analytics:renderAnalytics, integrations:renderIntegrations, settings:renderSettings };
+  if (renders[p]) renders[p]();
+}
+
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+function platB(p){ return `<span class="plat ${p}">${p==='meta'?'M':p==='google'?'G':'T'}</span>`; }
+function statusB(s){
+  if(s==='active') return `<span class="badge g"><span class="dot" style="background:var(--green)"></span>Actif</span>`;
+  if(s==='warning') return `<span class="badge a"><span class="dot" style="background:var(--amber)"></span>Alerte</span>`;
+  return `<span class="badge m"><span class="dot" style="background:var(--muted)"></span>Pausé</span>`;
+}
+function roasB(r){ const c=r>=4?'g':r>=2.5?'a':'r'; return `<span class="badge ${c}">${r}×</span>`; }
+
+function sparkSVG(data, color='#4F6EF7') {
+  const max=Math.max(...data), min=Math.min(...data), range=max-min||1;
+  const W=260,H=52,pad=3;
+  const pts=data.map((v,i)=>`${pad+(i/(data.length-1))*(W-pad*2)},${H-pad-(v-min)/range*(H-pad*2)}`).join(' ');
+  const area=`${pad},${H-pad} ${pts} ${W-pad},${H-pad}`;
+  const id='g'+Math.random().toString(36).slice(2,6);
+  return `<svg viewBox="0 0 ${W} ${H}" class="spark" preserveAspectRatio="none">
+    <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${color}" stop-opacity="0.2"/><stop offset="100%" stop-color="${color}" stop-opacity="0"/></linearGradient></defs>
+    <polygon points="${area}" fill="url(#${id})"/>
+    <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+
+function timeAgo(iso) {
+  const diff = Date.now() - new Date(iso).getTime();
+  if (diff < 3600000) return `il y a ${Math.floor(diff/60000)} min`;
+  if (diff < 86400000) return `il y a ${Math.floor(diff/3600000)}h`;
+  return `il y a ${Math.floor(diff/86400000)}j`;
+}
+
+function esc(s) { return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ═══════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════
+async function renderDashboard() {
+  const ov = await api('GET', '/api/analytics/overview') || {};
+  const totalSpend = campaigns.reduce((a,c)=>a+c.spend,0);
+  const totalRev = campaigns.reduce((a,c)=>a+c.revenue,0);
+
+  document.getElementById('content').innerHTML = `<div class="page">
+    <div class="mb13">
+      ${alerts.slice(0,3).map(a=>`
+        <div class="alert ${a.type==='warning'?'w':a.type==='success'?'s':'i'}">
+          <span>${a.type==='warning'?'⚠️':a.type==='success'?'✅':'ℹ️'}</span>
+          <span style="flex:1;">${esc(a.msg)}</span>
+          <span class="a-time">${timeAgo(a.time)}</span>
+        </div>`).join('')}
+    </div>
+    <div class="g4 mb13">
+      <div class="card"><div class="kpi-l">ROAS Global</div><div class="kpi-v">${ov.roas||4.7}×</div><div class="kpi-d up">↑ +12% vs sem. préc.</div><div class="fs11 tm" style="margin-top:4px;">Objectif 4× ✓</div></div>
+      <div class="card"><div class="kpi-l">CA Semaine</div><div class="kpi-v">${((ov.revenue||124000)/1000).toFixed(0)}K MAD</div><div class="kpi-d up">↑ +21% vs sem. préc.</div><div class="fs11 tm" style="margin-top:4px;">Budget ads: ${(totalSpend/1000).toFixed(1)}K MAD</div></div>
+      <div class="card"><div class="kpi-l">CPA Moyen</div><div class="kpi-v">${ov.cpa||38} MAD</div><div class="kpi-d up">↑ -16% (mieux)</div><div class="fs11 tm" style="margin-top:4px;">Objectif 45 MAD ✓</div></div>
+      <div class="card"><div class="kpi-l">Marge Nette</div><div class="kpi-v">${ov.margin||31}%</div><div class="kpi-d dn">↓ -2% vs objectif</div><div class="fs11 tm" style="margin-top:4px;">Objectif 33%</div></div>
+    </div>
+    <div class="g2 mb13">
+      <div class="card">
+        <div class="sh"><div><div style="font-family:var(--disp);font-weight:700;font-size:13px;">Chiffre d'Affaires</div><div class="fs11 tm">12 derniers mois · MAD</div></div><div class="fw7 tg" style="font-size:17px;">+89% YTD</div></div>
+        ${sparkSVG(ov.revenueHistory||[38,52,47,61,58,73,69,84,79,91,88,124],'#0ECB81')}
+        <div style="display:flex;justify-content:space-between;margin-top:5px;">${(ov.months||['J','F','M','A','M','J','J','A','S','O','N','D']).map(m=>`<span style="font-size:8px;color:var(--muted);">${m}</span>`).join('')}</div>
+      </div>
+      <div class="card">
+        <div style="font-family:var(--disp);font-weight:700;font-size:13px;margin-bottom:13px;">Répartition Budget Ads</div>
+        ${[{name:'Meta Ads',pct:47,color:'#1877F2',val:'5 922 MAD'},{name:'Google Ads',pct:35,color:'#EA4335',val:'4 410 MAD'},{name:'TikTok Ads',pct:18,color:'#69C9D0',val:'2 268 MAD'}].map(p=>`
+          <div class="brow"><div class="bmeta"><span class="tm">${p.name}</span><span class="fw7">${p.val}</span></div><div class="btrack"><div class="bfill" style="width:${p.pct}%;background:${p.color};"></div></div></div>`).join('')}
+      </div>
+    </div>
+    <div class="card">
+      <div class="sh"><div style="font-family:var(--disp);font-weight:700;font-size:13px;">Campagnes Actives</div><button class="btn bo" onclick="go('campaigns')">Voir tout →</button></div>
+      <div class="tw"><table>
+        <thead><tr><th>Campagne</th><th>Statut</th><th>Dépense</th><th>Revenus</th><th>ROAS</th><th>CPA</th></tr></thead>
+        <tbody>${campaigns.slice(0,4).map(c=>`
+          <tr class="tr" onclick="go('campaigns')">
+            <td><div style="display:flex;align-items:center;gap:7px;">${platB(c.platform)}<span class="fw7">${esc(c.name)}</span></div></td>
+            <td>${statusB(c.status)}</td>
+            <td class="mono">${(c.spend||0).toLocaleString()} MAD</td>
+            <td class="mono tg fw7">${(c.revenue||0).toLocaleString()} MAD</td>
+            <td>${roasB(c.roas)}</td>
+            <td class="mono">${c.cpa} MAD</td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// CAMPAIGNS
+// ═══════════════════════════════════════════════════════
+function renderCampaigns() {
+  document.getElementById('content').innerHTML = `<div class="page">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;" class="mb13">
+      <button class="btn bp" onclick="aiCampaign()">✨ Créer Campagne IA</button>
+      <button class="btn bo" onclick="aiAudience()">🎯 Générer Audiences</button>
+      <button class="btn bo" onclick="aiAB()">⚗️ A/B Testing</button>
+      <button class="btn bo" onclick="aiCopy()">✍️ Textes Pub</button>
+      <button class="btn bo" onclick="openNewCampaign()">+ Nouvelle Campagne</button>
+    </div>
+    ${campaigns.find(c=>c.roas<2.5&&c.status==='active') ? `
+    <div style="background:var(--accsoft);border:1px solid var(--accbdr);border-radius:13px;padding:16px;display:flex;gap:13px;margin-bottom:13px;">
+      <div style="font-size:20px;">🦙</div>
+      <div>
+        <div class="fw7 tacc fs12" style="margin-bottom:5px;">Recommandation Llama 3 · Priorité haute</div>
+        <div class="fs12" style="line-height:1.7;">${(() => {
+          const bad = campaigns.find(c=>c.roas<2.5&&c.status==='active');
+          return bad ? `La campagne <strong>${esc(bad.name)}</strong> génère un ROAS de ${bad.roas}× sous le seuil (2.5×). Dépense: ${bad.spend} MAD non rentable. Réduire le budget et réorienter vers vos meilleures campagnes.` : '';
+        })()}</div>
+        <button class="btn bp" style="margin-top:10px;font-size:11px;" onclick="applyReco()">⚡ Appliquer automatiquement</button>
+      </div>
+    </div>` : ''}
+    <div class="card">
+      <div class="sh"><div style="font-family:var(--disp);font-weight:700;font-size:13px;">Toutes les campagnes (${campaigns.length})</div><div class="fs12 tm">Total dépensé: ${campaigns.reduce((a,c)=>a+c.spend,0).toLocaleString()} MAD</div></div>
+      <div class="tw"><table>
+        <thead><tr><th>Campagne</th><th>Plat.</th><th>Statut</th><th>Budget</th><th>Dépense</th><th>Revenus</th><th>ROAS</th><th>CPA</th><th>Actions</th></tr></thead>
+        <tbody>${campaigns.map(c=>`
+          <tr class="tr">
+            <td class="fw7 fs12">${esc(c.name)}</td>
+            <td>${platB(c.platform)}</td>
+            <td>${statusB(c.status)}</td>
+            <td class="mono">${(c.budget||0).toLocaleString()} MAD</td>
+            <td class="mono">${(c.spend||0).toLocaleString()} MAD</td>
+            <td class="mono tg fw7">${(c.revenue||0).toLocaleString()} MAD</td>
+            <td>${roasB(c.roas)}</td>
+            <td class="mono">${c.cpa} MAD</td>
+            <td style="display:flex;gap:5px;">
+              <button class="btn bo" style="font-size:10px;padding:4px 9px;" onclick="optimizeCamp('${c.id}')">🦙 IA</button>
+              <button class="btn bo" style="font-size:10px;padding:4px 9px;" onclick="editCamp('${c.id}')">✏️</button>
+              <button class="btn" style="font-size:10px;padding:4px 9px;background:var(--rsoft);color:var(--red);border:1px solid var(--rbdr);" onclick="deleteCamp('${c.id}')">🗑</button>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>
+    </div>
+  </div>`;
+}
+
+async function applyReco() {
+  const bad = campaigns.find(c=>c.roas<2.5&&c.status==='active');
+  if (!bad) return;
+  await api('PUT', `/api/campaigns/${bad.id}`, { ...bad, status:'paused', budget: Math.round(bad.budget*0.25) });
+  await loadCampaigns();
+  renderCampaigns();
+  alert('✅ Campagne pausée et budget réduit de 75%. Réallouez manuellement vers vos meilleures campagnes.');
+}
+
+async function deleteCamp(id) {
+  if (!confirm('Supprimer cette campagne ?')) return;
+  await api('DELETE', `/api/campaigns/${id}`);
+  await loadCampaigns();
+  renderCampaigns();
+}
+
+function openNewCampaign() {
+  openMod('+ Nouvelle Campagne', `
+    <div class="fr">
+      <div class="fg"><label class="fl">Nom</label><input class="fi" id="nc-name" placeholder="Ma campagne"/></div>
+      <div class="fg"><label class="fl">Plateforme</label><select class="fs" id="nc-plat"><option value="meta">Meta Ads</option><option value="google">Google Ads</option><option value="tiktok">TikTok Ads</option></select></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Budget (MAD)</label><input class="fi" id="nc-budget" type="number" placeholder="2000"/></div>
+      <div class="fg"><label class="fl">CPA cible (MAD)</label><input class="fi" id="nc-cpa" type="number" placeholder="45"/></div>
+    </div>
+  `, `<button class="btn bo" onclick="closeMod()">Annuler</button><button class="btn bp" onclick="saveCamp()">Créer</button>`);
+}
+
+async function saveCamp() {
+  const name = document.getElementById('nc-name').value.trim();
+  const platform = document.getElementById('nc-plat').value;
+  const budget = parseFloat(document.getElementById('nc-budget').value)||0;
+  const cpa = parseFloat(document.getElementById('nc-cpa').value)||45;
+  if (!name) return alert('Nom requis');
+  await api('POST', '/api/campaigns', { name, platform, budget, cpa, spend:0, revenue:0, roas:0, clicks:0, impressions:0, status:'active' });
+  await loadCampaigns();
+  closeMod();
+  renderCampaigns();
+}
+
+function editCamp(id) {
+  const c = campaigns.find(x=>x.id===id);
+  if (!c) return;
+  openMod('✏️ Modifier Campagne', `
+    <div class="fr">
+      <div class="fg"><label class="fl">Nom</label><input class="fi" id="ec-name" value="${esc(c.name)}"/></div>
+      <div class="fg"><label class="fl">Statut</label><select class="fs" id="ec-status"><option value="active" ${c.status==='active'?'selected':''}>Actif</option><option value="paused" ${c.status==='paused'?'selected':''}>Pausé</option><option value="warning" ${c.status==='warning'?'selected':''}>Alerte</option></select></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Budget (MAD)</label><input class="fi" id="ec-budget" type="number" value="${c.budget||0}"/></div>
+      <div class="fg"><label class="fl">ROAS actuel</label><input class="fi" id="ec-roas" type="number" step="0.1" value="${c.roas||0}"/></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Dépense (MAD)</label><input class="fi" id="ec-spend" type="number" value="${c.spend||0}"/></div>
+      <div class="fg"><label class="fl">Revenus (MAD)</label><input class="fi" id="ec-revenue" type="number" value="${c.revenue||0}"/></div>
+    </div>
+  `, `<button class="btn bo" onclick="closeMod()">Annuler</button><button class="btn bp" onclick="updateCamp('${id}')">Sauvegarder</button>`);
+}
+
+async function updateCamp(id) {
+  const c = campaigns.find(x=>x.id===id);
+  const updated = { ...c, name:document.getElementById('ec-name').value, status:document.getElementById('ec-status').value, budget:parseFloat(document.getElementById('ec-budget').value)||0, roas:parseFloat(document.getElementById('ec-roas').value)||0, spend:parseFloat(document.getElementById('ec-spend').value)||0, revenue:parseFloat(document.getElementById('ec-revenue').value)||0 };
+  if (updated.spend>0) updated.cpa = Math.round(updated.spend/(updated.revenue/updated.roas/updated.roas||1));
+  await api('PUT', `/api/campaigns/${id}`, updated);
+  await loadCampaigns();
+  closeMod();
+  renderCampaigns();
+}
+
+// ═══════════════════════════════════════════════════════
+// ECOMMERCE
+// ═══════════════════════════════════════════════════════
+function renderEcommerce() {
+  document.getElementById('content').innerHTML = `<div class="page">
+    <div class="g3 mb13">
+      <div class="card"><div class="kpi-l">Commandes semaine</div><div class="kpi-v" style="font-size:24px;">1 184</div><div class="kpi-d up">↑ +18%</div></div>
+      <div class="card"><div class="kpi-l">Panier moyen</div><div class="kpi-v" style="font-size:24px;">347 MAD</div><div class="kpi-d up">↑ +5%</div></div>
+      <div class="card"><div class="kpi-l">Abandon panier</div><div class="kpi-v" style="font-size:24px;">23%</div><div class="kpi-d dn">↑ +3%</div></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="sh">
+          <div style="font-family:var(--disp);font-weight:700;font-size:13px;">🏆 Produits</div>
+          <div style="display:flex;gap:7px;">
+            <button class="btn bo" style="font-size:10px;padding:4px 9px;" onclick="aiPrices()">💡 Prix IA</button>
+            <button class="btn bo" style="font-size:10px;padding:4px 9px;" onclick="openNewProduct()">+ Ajouter</button>
+          </div>
+        </div>
+        <div class="tw"><table>
+          <thead><tr><th>Produit</th><th>Ventes</th><th>Marge</th><th>Stock</th><th>Tend.</th><th></th></tr></thead>
+          <tbody>${products.map(p=>`
+            <tr class="tr">
+              <td><div class="fw7 fs12">${esc(p.name)}</div>${p.alert?'<div class="badge r" style="margin-top:3px;font-size:9px;">⚠ critique</div>':''}</td>
+              <td class="mono fw7">${p.sales}</td>
+              <td><span class="badge ${p.margin>=50?'g':'a'}">${p.margin}%</span></td>
+              <td class="mono ${p.stock<20?'tr2 fw7':''}">${p.stock}</td>
+              <td style="font-size:16px;">${p.trend==='up'?'📈':'📉'}</td>
+              <td><button class="btn bo" style="font-size:10px;padding:3px 7px;" onclick="editProd('${p.id}')">✏️</button></td>
+            </tr>`).join('')}
+          </tbody>
+        </table></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:13px;">
+        ${products.filter(p=>p.stock<20).length>0?`
+        <div style="background:var(--rsoft);border:1px solid var(--rbdr);border-radius:13px;padding:16px;">
+          <div class="fw7 tr2" style="margin-bottom:8px;">🚨 Rupture Imminente</div>
+          ${products.filter(p=>p.stock<20).map(p=>`
+          <div class="fs12" style="margin-bottom:8px;line-height:1.6;"><strong>${esc(p.name)}</strong> : ${p.stock} unités restantes.<br>Rupture estimée très prochainement.</div>`).join('')}
+          <button class="btn br">🛒 Réapprovisionner</button>
+        </div>`:''}
+        <div class="card">
+          <div style="font-family:var(--disp);font-weight:700;font-size:13px;margin-bottom:13px;">📈 Prévisions IA · Mois prochain</div>
+          ${[{l:'CA prévu',v:'138 000 MAD'},{l:'Commandes',v:'1 320'},{l:'Budget ads optimal',v:'14 500 MAD'},{l:'ROAS cible',v:'5.1×'}].map(f=>`
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);">
+            <span class="fs12 tm">${f.l}</span><span class="fw7 fs12">${f.v}</span>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function openNewProduct() {
+  openMod('+ Nouveau Produit', `
+    <div class="fg"><label class="fl">Nom du produit</label><input class="fi" id="np-name" placeholder="Ex: Djellaba Premium S/M"/></div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Prix (MAD)</label><input class="fi" id="np-price" type="number" placeholder="850"/></div>
+      <div class="fg"><label class="fl">Marge (%)</label><input class="fi" id="np-margin" type="number" placeholder="45"/></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Stock</label><input class="fi" id="np-stock" type="number" placeholder="100"/></div>
+      <div class="fg"><label class="fl">Ventes/sem.</label><input class="fi" id="np-sales" type="number" placeholder="50"/></div>
+    </div>
+  `, `<button class="btn bo" onclick="closeMod()">Annuler</button><button class="btn bp" onclick="saveProd()">Créer</button>`);
+}
+
+async function saveProd() {
+  const name=document.getElementById('np-name').value.trim();
+  const price=parseFloat(document.getElementById('np-price').value)||0;
+  const margin=parseFloat(document.getElementById('np-margin').value)||0;
+  const stock=parseFloat(document.getElementById('np-stock').value)||0;
+  const sales=parseFloat(document.getElementById('np-sales').value)||0;
+  if(!name) return alert('Nom requis');
+  await api('POST','/api/products',{name,price,margin,stock,sales,trend:'up',alert:stock<20});
+  await loadProducts(); closeMod(); renderEcommerce();
+}
+
+function editProd(id) {
+  const p=products.find(x=>x.id===id); if(!p) return;
+  openMod('✏️ Modifier Produit', `
+    <div class="fg"><label class="fl">Nom</label><input class="fi" id="ep-name" value="${esc(p.name)}"/></div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Prix (MAD)</label><input class="fi" id="ep-price" type="number" value="${p.price}"/></div>
+      <div class="fg"><label class="fl">Marge (%)</label><input class="fi" id="ep-margin" type="number" value="${p.margin}"/></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Stock</label><input class="fi" id="ep-stock" type="number" value="${p.stock}"/></div>
+      <div class="fg"><label class="fl">Ventes/sem.</label><input class="fi" id="ep-sales" type="number" value="${p.sales}"/></div>
+    </div>
+    <div class="fg"><label class="fl">Tendance</label><select class="fs" id="ep-trend"><option value="up" ${p.trend==='up'?'selected':''}>📈 Hausse</option><option value="down" ${p.trend==='down'?'selected':''}>📉 Baisse</option></select></div>
+  `, `<button class="btn bo" onclick="closeMod()">Annuler</button><button class="btn br" onclick="deleteProd('${id}')">Supprimer</button><button class="btn bp" onclick="updateProd('${id}')">Sauvegarder</button>`);
+}
+
+async function updateProd(id) {
+  const p=products.find(x=>x.id===id);
+  const stock=parseFloat(document.getElementById('ep-stock').value)||0;
+  const updated={...p,name:document.getElementById('ep-name').value,price:parseFloat(document.getElementById('ep-price').value)||0,margin:parseFloat(document.getElementById('ep-margin').value)||0,stock,sales:parseFloat(document.getElementById('ep-sales').value)||0,trend:document.getElementById('ep-trend').value,alert:stock<20};
+  await api('PUT',`/api/products/${id}`,updated);
+  await loadProducts(); closeMod(); renderEcommerce();
+}
+
+async function deleteProd(id) {
+  if(!confirm('Supprimer ce produit ?')) return;
+  await api('DELETE',`/api/products/${id}`);
+  await loadProducts(); closeMod(); renderEcommerce();
+}
+
+// ═══════════════════════════════════════════════════════
+// ANALYTICS
+// ═══════════════════════════════════════════════════════
+async function renderAnalytics() {
+  const ov = await api('GET', '/api/analytics/overview') || {};
+  document.getElementById('content').innerHTML = `<div class="page">
+    <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px;">
+      ${["Aujourd'hui","Cette semaine","Ce mois","Q2 2026"].map((p,i)=>`
+        <button style="padding:6px 13px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid ${i===1?'var(--acc)':'var(--border)'};background:${i===1?'var(--accsoft)':'transparent'};color:${i===1?'var(--acc)':'var(--muted)'};font-family:var(--font);">${p}</button>`).join('')}
+    </div>
+    <div class="g2 mb13">
+      <div class="card">
+        <div style="font-family:var(--disp);font-weight:700;font-size:13px;margin-bottom:13px;">ROAS par Campagne</div>
+        ${campaigns.map(c=>`<div class="brow"><div class="bmeta"><span class="tm fs12">${esc(c.name.replace(/^(Meta|Google|TikTok) – /,''))}</span><span class="fw7 fs12 ${c.roas>=4?'tg':c.roas>=2.5?'ta':'tr2'}">${c.roas}×</span></div><div class="btrack"><div class="bfill" style="width:${Math.min((c.roas/10)*100,100)}%;background:${c.roas>=4?'var(--green)':c.roas>=2.5?'var(--amber)':'var(--red)'};"></div></div></div>`).join('')}
+      </div>
+      <div class="card">
+        <div style="font-family:var(--disp);font-weight:700;font-size:13px;margin-bottom:13px;">CPA par Campagne (MAD)</div>
+        ${campaigns.map(c=>`<div class="brow"><div class="bmeta"><span class="tm fs12">${esc(c.name.replace(/^(Meta|Google|TikTok) – /,''))}</span><span class="fw7 fs12 ${c.cpa<=30?'tg':c.cpa<=50?'ta':'tr2'}">${c.cpa} MAD</span></div><div class="btrack"><div class="bfill" style="width:${Math.min((c.cpa/100)*100,100)}%;background:${c.cpa<=30?'var(--green)':c.cpa<=50?'var(--amber)':'var(--red)'};"></div></div></div>`).join('')}
+      </div>
+    </div>
+    <div class="card mb13">
+      <div class="sh">
+        <div><div style="font-family:var(--disp);font-weight:700;font-size:13px;">Évolution CA 12 mois</div><div class="fs11 tm">En MAD</div></div>
+        <button class="btn bp" style="font-size:11px;" onclick="aiReport()">✨ Rapport IA</button>
+      </div>
+      ${sparkSVG(ov.revenueHistory||[38,52,47,61,58,73,69,84,79,91,88,124],'#0ECB81')}
+      <div style="display:flex;justify-content:space-between;margin-top:6px;">${(ov.months||['J','F','M','A','M','J','J','A','S','O','N','D']).map((m,i)=>`<div style="text-align:center;"><div style="font-size:8px;color:var(--muted);">${m}</div><div class="mono" style="font-size:9px;color:var(--muted2);">${(ov.revenueHistory||[])[i]||0}K</div></div>`).join('')}</div>
+    </div>
+    <div class="g3">
+      ${[{n:'Meta Ads',i:'📘',roas:6.0,spend:5100,rev:30600},{n:'Google Ads',i:'🔴',roas:5.65,spend:4400,rev:22900},{n:'TikTok Ads',i:'🎵',roas:1.4,spend:3100,rev:4340}].map(p=>`
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:13px;"><span style="font-size:18px;">${p.i}</span><div style="font-family:var(--disp);font-weight:700;font-size:13px;">${p.n}</div></div>
+          ${[['ROAS',p.roas+'×',p.roas>=3?'tg':'tr2'],['Dépensé',p.spend.toLocaleString()+' MAD',''],['Revenus',p.rev.toLocaleString()+' MAD','tg']].map(r=>`
+          <div style="display:flex;justify-content:space-between;margin-bottom:7px;"><span class="fs12 tm">${r[0]}</span><span class="fw7 fs12 ${r[2]}">${r[1]}</span></div>`).join('')}
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// INTEGRATIONS
+// ═══════════════════════════════════════════════════════
+function renderIntegrations() {
+  const list = [
+    {id:'meta',n:'Meta Ads',d:'Facebook & Instagram Ads',i:'📘',cat:'Publicité'},
+    {id:'google',n:'Google Ads',d:'Search, Shopping & Display',i:'🔴',cat:'Publicité'},
+    {id:'tiktok',n:'TikTok Ads',d:'TikTok for Business',i:'🎵',cat:'Publicité'},
+    {id:'shopify',n:'Shopify',d:'E-commerce & gestion stocks',i:'🟢',cat:'E-commerce'},
+    {id:'woo',n:'WooCommerce',d:'WordPress E-commerce',i:'🛒',cat:'E-commerce'},
+    {id:'presta',n:'PrestaShop',d:'Solution e-commerce FR/MA',i:'🏪',cat:'E-commerce'},
+  ];
+  document.getElementById('content').innerHTML = `<div class="page">
+    <div class="card mb13">
+      <div class="api-s ok">✅ Groq API (Llama 3.3-70b-versatile) — Connecté et opérationnel</div>
+      <div style="margin-top:9px;background:var(--surf2);border:1px solid var(--border);border-radius:9px;padding:12px;font-family:var(--mono);font-size:11px;color:var(--muted);">
+        Endpoint : https://api.groq.com/openai/v1/chat/completions<br>
+        Modèle : llama-3.3-70b-versatile<br>
+        Clé : configurée côté serveur (sécurisée)<br>
+        Status : Actif
+      </div>
+      <button class="btn bo" style="margin-top:10px;font-size:11px;" onclick="testGroq()">🔍 Tester la connexion</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:9px;">
+      ${list.map(p=>`
+        <div class="ic-wrap ${integrations[p.id]?'conn':''}">
+          <div class="ic-icon">${p.i}</div>
+          <div style="flex:1;">
+            <div class="fw7 fs12" style="margin-bottom:2px;">${p.n} <span class="badge b" style="font-size:9px;">${p.cat}</span></div>
+            <div class="fs11 tm">${p.d}</div>
+            ${integrations[p.id]?'<div class="fs11 tg" style="margin-top:3px;">✓ Connecté · Synchronisation auto activée</div>':'<div class="fs11 tm" style="margin-top:3px;">Non connecté · Cliquez pour configurer</div>'}
+          </div>
+          <button class="tog ${integrations[p.id]?'on':'off'}" onclick="toggleInteg('${p.id}')"></button>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+async function toggleInteg(id) {
+  integrations[id] = !integrations[id];
+  await api('PUT', '/api/integrations', integrations);
+  renderIntegrations();
+}
+
+async function testGroq() {
+  const r = await api('GET', '/api/ai/test');
+  if (r && r.ok) alert('✅ ' + r.response + '\nModèle: ' + r.model);
+  else alert('❌ Erreur: ' + (r?.error||'Connexion échouée'));
+}
+
+// ═══════════════════════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════════════════════
+function renderSettings() {
+  document.getElementById('content').innerHTML = `<div class="page">
+    <div class="g2">
+      <div>
+        <div class="card mb13">
+          <div style="font-family:var(--disp);font-weight:700;font-size:13px;margin-bottom:13px;">⚙️ Mon Compte</div>
+          <div class="fg"><label class="fl">Nom</label><input class="fi" value="${esc(user.name||'')}"/></div>
+          <div class="fg"><label class="fl">Email</label><input class="fi" value="${esc(user.email||'')}" readonly style="opacity:0.6;"/></div>
+          <div class="fg"><label class="fl">Entreprise</label><input class="fi" value="${esc(user.company||'')}"/></div>
+          <div class="fg"><label class="fl">Plan</label><input class="fi" value="${esc(user.plan||'starter')}" readonly style="opacity:0.6;"/></div>
+          <button class="btn bp">Sauvegarder</button>
+        </div>
+        <div class="card">
+          <div style="font-family:var(--disp);font-weight:700;font-size:13px;margin-bottom:13px;">🔔 Alertes Automatiques</div>
+          ${[{l:'ROAS sous le seuil',d:'Alerte si ROAS < 2.5×',on:true},{l:'Baisse CA > 15%',d:'Comparaison semaine précédente',on:true},{l:'Stock critique',d:'Alerte si stock < 20 unités',on:true},{l:'Rapport hebdo auto',d:'Envoi chaque lundi 8h',on:false}].map(a=>`
+          <div style="display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--border);">
+            <div style="flex:1;"><div class="fs12 fw7">${a.l}</div><div class="fs11 tm">${a.d}</div></div>
+            <button class="tog ${a.on?'on':'off'}" onclick="this.classList.toggle('on');this.classList.toggle('off');"></button>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div>
+        <div class="card mb13">
+          <div style="font-family:var(--disp);font-weight:700;font-size:13px;margin-bottom:13px;">🦙 Groq IA Configuration</div>
+          <div class="fg"><label class="fl">Clé API (variable Railway)</label><input class="fi" value="gsk_••••••••••••••••••••" readonly style="opacity:0.6;"/></div>
+          <div class="fg"><label class="fl">Modèle</label><select class="fs"><option selected>llama-3.3-70b-versatile</option><option>llama-3.1-8b-instant</option><option>mixtral-8x7b-32768</option></select></div>
+          <div class="api-s ok" style="margin-bottom:11px;">✅ Connexion Groq opérationnelle</div>
+          <button class="btn bo" onclick="testGroq()">🔍 Tester</button>
+        </div>
+        <div class="card">
+          <div style="font-family:var(--disp);font-weight:700;font-size:13px;margin-bottom:13px;">📊 Seuils de Performance</div>
+          ${[{l:'ROAS minimum rentable',v:'2.5×'},{l:'CPA maximum cible',v:'45 MAD'},{l:'Marge nette objectif',v:'33%'},{l:'Budget ads max/jour',v:'600 MAD'}].map(s=>`
+          <div style="display:flex;align-items:center;gap:11px;padding:7px 0;border-bottom:1px solid var(--border);">
+            <span class="fs12 tm" style="flex:1;">${s.l}</span><input class="fi" style="width:100px;" value="${s.v}"/>
+          </div>`).join('')}
+          <button class="btn bp" style="margin-top:11px;">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════════════════════
+function openMod(title, body, footer='') {
+  document.getElementById('m-title').textContent = title;
+  document.getElementById('m-body').innerHTML = body;
+  document.getElementById('m-foot').innerHTML = footer;
+  document.getElementById('mover').style.display = 'flex';
+}
+function closeMod(e) {
+  if (!e || e.target === document.getElementById('mover')) document.getElementById('mover').style.display = 'none';
+}
+
+// ═══════════════════════════════════════════════════════
+// CHAT
+// ═══════════════════════════════════════════════════════
+function openChat() {
+  document.getElementById('chat').classList.remove('hid');
+  document.getElementById('fab').style.display = 'none';
+  if (chatMsgs.length === 0) {
+    appendMsg('ai', `👋 Bonjour ${user?.name?.split(' ')[0]||''}!\n\nJe suis votre agent IA propulsé par Llama 3 via Groq.\n\nJe connais vos campagnes et vos données en temps réel. Comment puis-je vous aider ?`);
+  }
+  setTimeout(()=>document.getElementById('ci').focus(), 100);
+}
+function closeChat() {
+  document.getElementById('chat').classList.add('hid');
+  document.getElementById('fab').style.display = '';
+}
+function appendMsg(type, text) {
+  const body = document.getElementById('c-body');
+  const d = document.createElement('div');
+  d.className = 'msg ' + type;
+  d.textContent = text;
+  body.appendChild(d);
+  body.scrollTop = body.scrollHeight;
+  return d;
+}
+function showTyping() {
+  const body = document.getElementById('c-body');
+  const d = document.createElement('div');
+  d.className = 'typing'; d.id = 'typ';
+  d.innerHTML = '<span></span><span></span><span></span>';
+  body.appendChild(d);
+  body.scrollTop = body.scrollHeight;
+}
+function removeTyping() { const t=document.getElementById('typ'); if(t)t.remove(); }
+
+async function sendChat() {
+  const input = document.getElementById('ci');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  document.getElementById('csend').disabled = true;
+  document.getElementById('c-sugs').style.display = 'none';
+  chatMsgs.push({ role:'user', content:text });
+  appendMsg('user', text);
+  showTyping();
+  try {
+    const r = await api('POST', '/api/ai/chat', { messages: chatMsgs });
+    removeTyping();
+    if (r && r.reply) {
+      appendMsg('ai', r.reply);
+      chatMsgs.push({ role:'assistant', content:r.reply });
+    } else {
+      appendMsg('ai', '❌ Erreur: ' + (r?.error||'Réponse invalide'));
+    }
+  } catch(e) {
+    removeTyping();
+    appendMsg('ai', '❌ Erreur réseau: ' + e.message);
+  }
+  document.getElementById('csend').disabled = false;
+}
+function qa(text) { document.getElementById('ci').value=text; sendChat(); }
+
+// ═══════════════════════════════════════════════════════
+// AI MODALS
+// ═══════════════════════════════════════════════════════
+async function aiReport() {
+  openMod('✨ Rapport Exécutif IA · Llama 3',
+    `<div style="text-align:center;padding:28px;" class="pulse"><div style="font-size:36px;margin-bottom:10px;">🦙</div><div class="fs12 tm">Génération du rapport via Groq…</div></div>`, '');
+  const r = await api('POST', '/api/ai/report', { period:'hebdomadaire' });
+  if (r && r.report) {
+    document.getElementById('m-body').innerHTML = `<div class="rc">${r.report.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/#{1,3} (.*)/g,'<div style="font-family:var(--disp);font-weight:700;font-size:14px;margin:13px 0 5px;color:var(--acc);">$1</div>')}</div>`;
+    document.getElementById('m-foot').innerHTML = `<button class="btn bo" onclick="closeMod()">Fermer</button><button class="btn bp" onclick="navigator.clipboard.writeText(document.querySelector('.rc').textContent)">📋 Copier</button>`;
+  } else {
+    document.getElementById('m-body').innerHTML = `<div class="alert w">❌ Erreur: ${r?.error||'Inconnu'}</div>`;
+  }
+}
+
+function aiAB() {
+  openMod('⚗️ A/B Testing IA', `
+    <div class="fg"><label class="fl">Produit / Service</label><input class="fi" id="ab-p" placeholder="Ex: Djellaba Premium"/></div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Plateforme</label><select class="fs" id="ab-pl"><option>Meta Ads</option><option>Google Ads</option><option>TikTok Ads</option></select></div>
+      <div class="fg"><label class="fl">Objectif</label><select class="fs" id="ab-g"><option>Ventes</option><option>Notoriété</option><option>Leads</option></select></div>
+    </div>
+    <div class="fg"><label class="fl">Budget total (MAD)</label><input class="fi" id="ab-b" type="number" placeholder="2000"/></div>
+    <div id="ab-r"></div>
+  `, `<button class="btn bo" onclick="closeMod()">Annuler</button><button class="btn bp" onclick="runAB()">🦙 Générer</button>`);
+}
+async function runAB() {
+  const res = document.getElementById('ab-r');
+  res.innerHTML = `<div style="text-align:center;padding:16px;" class="pulse">🦙 Génération…</div>`;
+  const r = await api('POST','/api/ai/ab-test',{product:document.getElementById('ab-p').value||'Produit',platform:document.getElementById('ab-pl').value,goal:document.getElementById('ab-g').value,budget:document.getElementById('ab-b').value||2000});
+  res.innerHTML = r?.result ? `<div class="divider"></div><div class="rc">${r.result.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>` : `<div class="alert w">❌ ${r?.error}</div>`;
+}
+
+function aiCopy() {
+  openMod('✍️ Textes Publicitaires IA', `
+    <div class="fg"><label class="fl">Produit / Offre</label><input class="fi" id="cp-p" placeholder="Ex: Caftan brodé, livraison gratuite"/></div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Ton</label><select class="fs" id="cp-t"><option>Élégant & luxe</option><option>Urgent & promo</option><option>Storytelling</option><option>Direct & factuel</option></select></div>
+      <div class="fg"><label class="fl">Plateforme</label><select class="fs" id="cp-pl"><option>Facebook/Instagram</option><option>TikTok</option><option>Google Ads</option></select></div>
+    </div>
+    <div class="fg"><label class="fl">Langue</label><select class="fs" id="cp-l"><option>Français</option><option>Darija (عربية)</option><option>English</option></select></div>
+    <div id="cp-r"></div>
+  `, `<button class="btn bo" onclick="closeMod()">Annuler</button><button class="btn bp" onclick="runCopy()">🦙 Générer 5 variantes</button>`);
+}
+async function runCopy() {
+  const res=document.getElementById('cp-r');
+  res.innerHTML=`<div style="text-align:center;padding:16px;" class="pulse">🦙 Génération…</div>`;
+  const r=await api('POST','/api/ai/copy',{product:document.getElementById('cp-p').value||'Produit',tone:document.getElementById('cp-t').value,platform:document.getElementById('cp-pl').value,language:document.getElementById('cp-l').value});
+  res.innerHTML=r?.result?`<div class="divider"></div><div class="rc">${r.result.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`:`<div class="alert w">❌ ${r?.error}</div>`;
+}
+
+function aiAudience() {
+  openMod('🎯 Générateur Audiences IA', `
+    <div class="fg"><label class="fl">Produit / Catégorie</label><input class="fi" id="au-p" placeholder="Ex: Mode traditionnelle femme"/></div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Plateforme</label><select class="fs" id="au-pl"><option>Meta Ads</option><option>Google Ads</option><option>TikTok Ads</option></select></div>
+      <div class="fg"><label class="fl">Budget/jour (MAD)</label><input class="fi" id="au-b" type="number" placeholder="200"/></div>
+    </div>
+    <div class="fg"><label class="fl">Objectif</label><select class="fs" id="au-g"><option>Maximiser ventes</option><option>Nouveaux clients</option><option>Remarketing</option><option>Notoriété</option></select></div>
+    <div id="au-r"></div>
+  `, `<button class="btn bo" onclick="closeMod()">Annuler</button><button class="btn bp" onclick="runAudience()">🦙 Générer audiences</button>`);
+}
+async function runAudience() {
+  const res=document.getElementById('au-r');
+  res.innerHTML=`<div style="text-align:center;padding:16px;" class="pulse">🦙 Analyse…</div>`;
+  const r=await api('POST','/api/ai/audience',{product:document.getElementById('au-p').value||'Mode',platform:document.getElementById('au-pl').value,budget:document.getElementById('au-b').value||200,goal:document.getElementById('au-g').value});
+  res.innerHTML=r?.result?`<div class="divider"></div><div class="rc">${r.result.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`:`<div class="alert w">❌ ${r?.error}</div>`;
+}
+
+function aiCampaign() {
+  openMod('✨ Créer Campagne avec IA', `
+    <div class="fr">
+      <div class="fg"><label class="fl">Plateforme</label><select class="fs" id="ac-pl"><option>Meta Ads</option><option>Google Ads</option><option>TikTok Ads</option></select></div>
+      <div class="fg"><label class="fl">Objectif</label><select class="fs" id="ac-g"><option>Ventes</option><option>Leads</option><option>Trafic</option><option>Notoriété</option></select></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Budget (MAD)</label><input class="fi" id="ac-b" type="number" placeholder="3000"/></div>
+      <div class="fg"><label class="fl">Durée (jours)</label><input class="fi" id="ac-d" type="number" placeholder="14"/></div>
+    </div>
+    <div class="fg"><label class="fl">Produit / Offre</label><textarea class="fta" id="ac-p" placeholder="Décrivez votre produit, prix, avantages…"></textarea></div>
+    <div id="ac-r"></div>
+  `, `<button class="btn bo" onclick="closeMod()">Annuler</button><button class="btn bp" onclick="runCampaign()">🦙 Générer plan complet</button>`);
+}
+async function runCampaign() {
+  const res=document.getElementById('ac-r');
+  res.innerHTML=`<div style="text-align:center;padding:16px;" class="pulse">🦙 Construction campagne…</div>`;
+  const r=await api('POST','/api/ai/campaign',{platform:document.getElementById('ac-pl').value,goal:document.getElementById('ac-g').value,budget:document.getElementById('ac-b').value||3000,duration:document.getElementById('ac-d').value||14,product:document.getElementById('ac-p').value||'Produit'});
+  res.innerHTML=r?.result?`<div class="divider"></div><div class="rc">${r.result.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`:`<div class="alert w">❌ ${r?.error}</div>`;
+}
+
+async function optimizeCamp(id) {
+  const c=campaigns.find(x=>x.id===id); if(!c) return;
+  openMod(`🦙 Optimisation · ${c.name}`,`<div style="text-align:center;padding:28px;" class="pulse"><div style="font-size:32px;">🦙</div><div class="fs12 tm" style="margin-top:8px;">Analyse en cours…</div></div>`,'');
+  const r=await api('POST',`/api/ai/optimize/${id}`);
+  if(r?.result){
+    document.getElementById('m-body').innerHTML=`<div class="rc">${r.result.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;
+    document.getElementById('m-foot').innerHTML=`<button class="btn bo" onclick="closeMod()">Fermer</button>`;
+  } else {
+    document.getElementById('m-body').innerHTML=`<div class="alert w">❌ ${r?.error}</div>`;
+  }
+}
+
+async function aiPrices() {
+  openMod('💡 Suggestions Prix IA',`<div style="text-align:center;padding:28px;" class="pulse"><div style="font-size:32px;">🦙</div><div class="fs12 tm" style="margin-top:8px;">Analyse des prix…</div></div>`,'');
+  const r=await api('POST','/api/ai/prices');
+  if(r?.result){
+    document.getElementById('m-body').innerHTML=`<div class="rc">${r.result.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;
+    document.getElementById('m-foot').innerHTML=`<button class="btn bo" onclick="closeMod()">Fermer</button>`;
+  } else {
+    document.getElementById('m-body').innerHTML=`<div class="alert w">❌ ${r?.error}</div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// START
+// ═══════════════════════════════════════════════════════
+init();
+</script>
+</body>
+</html>

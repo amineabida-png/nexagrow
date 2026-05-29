@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexaGrow — Connexion</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Instrument Sans',sans-serif;background:#07080C;color:#DDE1EE;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.wrap{width:100%;max-width:420px;}
+.logo{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:36px;}
+.logo-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#4F6EF7,#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:20px;}
+.logo-text{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;}
+.logo-sub{font-size:10px;color:#5A6280;letter-spacing:1.5px;text-transform:uppercase;}
+.card{background:#0E1018;border:1px solid #1C2032;border-radius:18px;padding:32px;}
+.title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+.subtitle{font-size:13px;color:#5A6280;margin-bottom:24px;}
+.lbl{display:block;font-size:11px;font-weight:600;color:#5A6280;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:6px;}
+input{width:100%;background:#141720;border:1px solid #1C2032;border-radius:10px;padding:11px 14px;color:#DDE1EE;font-size:13.5px;font-family:'Instrument Sans',sans-serif;outline:none;transition:border-color 0.15s;margin-bottom:14px;}
+input:focus{border-color:#4F6EF7;}
+.btn{width:100%;padding:12px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:'Instrument Sans',sans-serif;background:#4F6EF7;color:#fff;transition:opacity 0.15s;}
+.btn:hover{opacity:0.88;}
+.btn:disabled{opacity:0.5;cursor:not-allowed;}
+.err{background:#F0464A15;border:1px solid #F0464A33;border-radius:10px;padding:10px 14px;font-size:12.5px;color:#F0464A;margin-bottom:14px;display:none;}
+.divider{text-align:center;color:#5A6280;font-size:12px;margin:18px 0;}
+.demo-box{background:#4F6EF710;border:1px solid #4F6EF733;border-radius:12px;padding:14px;margin-top:18px;font-size:12px;}
+.demo-creds{display:flex;gap:8px;margin-top:10px;}
+.demo-btn{flex:1;padding:8px;border-radius:8px;border:1px solid #4F6EF733;background:none;color:#4F6EF7;font-size:12px;cursor:pointer;font-family:'Instrument Sans',sans-serif;font-weight:600;}
+.reg{text-align:center;margin-top:18px;font-size:13px;color:#5A6280;}
+.reg a{color:#4F6EF7;text-decoration:none;font-weight:600;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">
+    <div class="logo-icon">⚡</div>
+    <div>
+      <div class="logo-text">NexaGrow</div>
+      <div class="logo-sub">AI Marketing Suite</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="title">Connexion</div>
+    <div class="subtitle">Accédez à votre tableau de bord marketing IA</div>
+    <div class="err" id="err"></div>
+    <label class="lbl">Email</label>
+    <input id="email" type="email" placeholder="vous@entreprise.ma"/>
+    <label class="lbl">Mot de passe</label>
+    <input id="pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()"/>
+    <button class="btn" id="btn" onclick="login()">Se connecter →</button>
+    <div class="divider">— ou essayer la démo —</div>
+    <div class="demo-box">
+      <strong style="color:#4F6EF7;">🎯 Compte démo disponible</strong><br>
+      Explorez toutes les fonctionnalités avec des données réelles.
+      <div class="demo-creds">
+        <button class="demo-btn" onclick="fill()">📧 Remplir auto</button>
+        <button class="demo-btn" onclick="fill();login()">⚡ Connexion rapide</button>
+      </div>
+    </div>
+    <div class="reg">Pas de compte ? <a href="/register">Créer un compte</a></div>
+  </div>
+</div>
+<script>
+function fill(){document.getElementById('email').value='demo@nexagrow.ma';document.getElementById('pass').value='demo';}
+async function login(){
+  const email=document.getElementById('email').value.trim();
+  const pass=document.getElementById('pass').value;
+  const btn=document.getElementById('btn');
+  const err=document.getElementById('err');
+  err.style.display='none';
+  if(!email||!pass){err.textContent='Remplissez tous les champs.';err.style.display='block';return;}
+  btn.disabled=true;btn.textContent='Connexion…';
+  try{
+    const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({email,password:pass})});
+    const d=await r.json();
+    if(!r.ok){err.textContent=d.error||'Erreur.';err.style.display='block';}
+    else window.location.href='/app';
+  }catch(e){err.textContent='Erreur réseau.';err.style.display='block';}
+  btn.disabled=false;btn.textContent='Se connecter →';
+}
+</script>
+</body>
+</html>
